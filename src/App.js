@@ -1,11 +1,13 @@
-import styled from 'styled-components';
+import Header from './components/UI/Header';
+import Login from './pages/Login';
 
 const App = () => {
-  return <H1>Tmoney</H1>;
+  return (
+    <>
+      <Header />
+      <Login />
+    </>
+  );
 };
-
-const H1 = styled.h1`
-  font-size: ${({ theme }) => theme.size.heading};
-`;
 
 export default App;
