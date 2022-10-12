@@ -1,11 +1,11 @@
 import Header from './components/UI/Header';
-import Lookup from './pages/Lookup';
+import Home from './pages/Home';
 
 const App = () => {
   return (
     <>
       <Header />
-      <Lookup />
+      <Home />
     </>
   );
 };
