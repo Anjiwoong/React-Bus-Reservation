@@ -9,14 +9,8 @@ const ButtonWrap = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-
-  background: ${({ theme }) => theme.color.primaryColor};
-  color: ${({ theme }) => theme.color.white};
-  width: 100%;
-  height: 100px;
-  border-radius: 15px;
+  cursor: pointer;
   border: none;
-  font-size: ${({ theme }) => theme.size.medium1};
 `;
 
 export default Button;
