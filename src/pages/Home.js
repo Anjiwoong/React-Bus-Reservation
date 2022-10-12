@@ -1,13 +1,22 @@
-import React from 'react';
 import Card from '../components/UI/Card';
-import Title from '../components/UI/Title';
+import Heading from '../components/UI/Heading';
+import Layer from '../components/UI/Layer';
+import TicketButtons from '../components/home/TicketButtons';
+import TerminalButtons from '../components/home/TerminalButtons';
+import CheckButtons from '../components/home/CheckButtons';
+import DateSelectors from '../components/home/DateSelectors';
 
 const Home = () => {
   return (
-    <>
-      <Title>왜그랬지?</Title>
-      <Card>Home</Card>
-    </>
+    <Layer>
+      <Heading>예매하기</Heading>
+      <Card>
+        <TicketButtons />
+        <DateSelectors />
+        <TerminalButtons />
+        <CheckButtons />
+      </Card>
+    </Layer>
   );
 };
 
