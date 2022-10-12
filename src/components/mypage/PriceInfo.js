@@ -1,0 +1,33 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const PriceInfo = () => {
+  return (
+    <PriceWrap>
+      <Adult>
+        성인 <span>1</span>명
+      </Adult>
+      <Price>7,800원</Price>
+    </PriceWrap>
+  );
+};
+
+const PriceWrap = styled.div`
+  height: 105px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Adult = styled.p`
+  font-size: ${({ theme }) => theme.size.text};
+  color: ${({ theme }) => theme.color.gray1};
+`;
+
+const Price = styled.p`
+  font-size: ${({ theme }) => theme.size.medium1};
+  color: ${({ theme }) => theme.color.primaryFont};
+  font-weight: bold;
+`;
+
+export default PriceInfo;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Heading = (props) => {
+const Heading = props => {
   return <Wrapper>{props.children}</Wrapper>;
 };
 
