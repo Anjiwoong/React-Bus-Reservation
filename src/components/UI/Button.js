@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = props => {
+const Button = (props) => {
   return <ButtonWrap {...props}>{props.children}</ButtonWrap>;
 };
 

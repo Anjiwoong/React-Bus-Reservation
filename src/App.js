@@ -1,6 +1,7 @@
 import Header from './components/UI/Header';
 import Seat from './pages/Seat';
 
+
 const App = () => {
   return (
     <>
