@@ -1,11 +1,11 @@
 import Header from './components/UI/Header';
-import Mypage from './pages/Mypage';
+import Seat from './pages/Seat';
 
 const App = () => {
   return (
     <>
       <Header />
-      <Mypage />
+      <Seat />
     </>
   );
 };
