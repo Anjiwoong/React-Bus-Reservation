@@ -1,11 +1,12 @@
 import Header from './components/UI/Header';
-import Home from './pages/Home';
+import Seat from './pages/Seat';
+
 
 const App = () => {
   return (
     <>
       <Header />
-      <Home />
+      <Seat />
     </>
   );
 };
