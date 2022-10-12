@@ -1,12 +1,11 @@
 import Header from './components/UI/Header';
-import Seat from './pages/Seat';
-
+import Lookup from './pages/Lookup';
 
 const App = () => {
   return (
     <>
       <Header />
-      <Seat />
+      <Lookup />
     </>
   );
 };

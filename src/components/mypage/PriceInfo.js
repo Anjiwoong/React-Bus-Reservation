@@ -17,6 +17,7 @@ const PriceWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 1px solid ${({ theme }) => theme.color.bgColor};
 `;
 
 const Adult = styled.p`
