@@ -28,7 +28,6 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 30px;
   padding: 65px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.color.bgColor};
 
   div {
     width: 45%;
