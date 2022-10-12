@@ -1,11 +1,11 @@
 import Header from './components/UI/Header';
-import Signup from './pages/Signup';
+import Mypage from './pages/Mypage';
 
 const App = () => {
   return (
     <>
       <Header />
-      <Signup />
+      <Mypage />
     </>
   );
 };
