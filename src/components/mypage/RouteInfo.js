@@ -19,7 +19,6 @@ const RouteInfo = () => {
 };
 
 const Wrapper = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.color.bgColor};
   display: flex;
   height: 225px;
   justify-content: space-around;
