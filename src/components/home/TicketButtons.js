@@ -8,9 +8,9 @@ const TicketButtons = () => {
   const dispatch = useDispatch();
   const oneway = useSelector(state => state.ticket.oneway);
 
-  const oneWayHandler = () => dispatch(ticketActions.changeWay('oneway'));
+  const oneWayHandler = () => dispatch(ticketActions.changeWay(true));
 
-  const roundTripHandler = () => dispatch(ticketActions.changeWay('roundTrip'));
+  const roundTripHandler = () => dispatch(ticketActions.changeWay(false));
 
   return (
     <Wrapper>

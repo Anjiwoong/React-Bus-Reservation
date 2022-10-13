@@ -29,6 +29,7 @@ const DateSelectors = () => {
           data-placeholder="오는날"
           required
           aria-required="true"
+          min={today}
           onChange={changeArrivalDateHandler}
         />
       )}
