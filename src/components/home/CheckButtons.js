@@ -4,15 +4,15 @@ const CheckButtons = () => {
   return (
     <Wrapper>
       <div>
-        <input type='radio' id='normal' name='busType' checked />
-        <label htmlFor='normal'>
+        <input type="radio" id="normal" name="busType" defaultChecked />
+        <label htmlFor="normal">
           <CheckIcon></CheckIcon>
           <span>일반</span>
         </label>
       </div>
       <div>
-        <input type='radio' id='premium' name='busType' />
-        <label htmlFor='premium'>
+        <input type="radio" id="premium" name="busType" />
+        <label htmlFor="premium">
           <CheckIcon></CheckIcon>
           <span>우등</span>
         </label>

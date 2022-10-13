@@ -1,16 +1,61 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Input from '../components/UI/Input';
+import AuthContext from '../store/auth-context';
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const authCtx = useContext(AuthContext);
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const navigate = useNavigate();
+
+  const fetchUser = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNyFg3LGy2o1VHY2BbNXmrIfEGgEYjisk',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: emailInputRef.current.value,
+            password: passwordInputRef.current.value,
+            returnSecureToken: true,
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      setIsLoading(false);
+
+      if (!response.ok) {
+        throw new Error('아이디 또는 비밀번호를 확인해주세요.');
+      }
+
+      const data = await response.json();
+
+      authCtx.login(data.idToken);
+      navigate('/');
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const submitHandler = e => {
+    e.preventDefault();
+
+    fetchUser();
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onSubmit={submitHandler}>
       <Title>로그인</Title>
-      <Input type="email" placeholder="이메일" />
-      <Input type="password" placeholder="비밀번호" />
-      <LoginButton>로그인</LoginButton>
+      <Input type="email" placeholder="이메일" ref={emailInputRef} />
+      <Input type="password" placeholder="비밀번호" ref={passwordInputRef} />
+      {!isLoading && <LoginButton>로그인</LoginButton>}
+      {isLoading && <LoadingButton>Loading...</LoadingButton>}
       <SignupLink to="/signup">회원가입</SignupLink>
     </Wrapper>
   );
@@ -34,6 +79,10 @@ const LoginButton = styled(Button)`
   height: 100px;
   border-radius: 15px;
   font-size: ${({ theme }) => theme.size.medium1};
+`;
+
+const LoadingButton = styled(LoginButton)`
+  background: ${({ theme }) => theme.color.primaryFont};
 `;
 
 const SignupLink = styled(Link)`

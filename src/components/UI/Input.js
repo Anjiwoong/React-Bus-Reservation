@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
-const Input = props => {
-  return <InputWrap {...props} />;
-};
+const Input = forwardRef((props, ref) => {
+  return <InputWrap {...props} ref={ref} />;
+});
 
 const InputWrap = styled.input`
   width: 100%;

@@ -6,30 +6,31 @@ import TicketButtons from '../components/home/TicketButtons';
 import TerminalButtons from '../components/home/TerminalButtons';
 import CheckButtons from '../components/home/CheckButtons';
 import DateSelectors from '../components/home/DateSelectors';
-import SearchModal from '../components/UI/SearchModal';
 import styled from 'styled-components';
 import { BiChevronRight } from 'react-icons/bi';
 
 const Home = () => {
   return (
-    <Layer>
-      <Heading>예매하기</Heading>
-      {/* <SearchModal /> */}
-      <Card>
-        <TicketButtons />
-        <DateSelectors />
-        <TerminalButtons />
-        <CheckButtons />
-      </Card>
-      <LookupButton>
-        <span>배차 조회하기</span>
-        <BiChevronRight />
-      </LookupButton>
-      <ConfirmButton>
-        <span>예매 확인 및 취소</span>
-        <BiChevronRight />
-      </ConfirmButton>
-    </Layer>
+    <>
+      <Layer>
+        <Heading>예매하기</Heading>
+        {/* <SearchModal /> */}
+        <Card>
+          <TicketButtons />
+          <DateSelectors />
+          <TerminalButtons />
+          <CheckButtons />
+        </Card>
+        <LookupButton>
+          <span>배차 조회하기</span>
+          <BiChevronRight />
+        </LookupButton>
+        <ConfirmButton>
+          <span>예매 확인 및 취소</span>
+          <BiChevronRight />
+        </ConfirmButton>
+      </Layer>
+    </>
   );
 };
 

@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { FaBus } from 'react-icons/fa';
+import AuthContext from '../../store/auth-context';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const isLoggedIn = authCtx.isLoggedIn;
+
+  const logoutHandler = () => {
+    authCtx.logout();
+    navigate('/login');
+  };
+
   return (
     <Wrapper>
       <Content>
         <Title>
           <FaBus />
-          <span>시외버스 예약</span>
+          <Link to={isLoggedIn ? '/' : '/login'}>시외버스 예약</Link>
         </Title>
-        <Button>로그아웃</Button>
+        {isLoggedIn && <Button onClick={logoutHandler}>로그아웃</Button>}
       </Content>
     </Wrapper>
   );
@@ -41,6 +53,11 @@ const Title = styled.div`
 
   svg {
     font-size: ${({ theme }) => theme.size.medium1};
+  }
+
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.color.white};
   }
 `;
 
