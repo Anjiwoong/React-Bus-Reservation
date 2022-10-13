@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/UI/Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -6,18 +6,52 @@ import Signup from './pages/Signup';
 import Mypage from './pages/Mypage';
 import Lookup from './pages/Lookup';
 import Seat from './pages/Seat';
+import { useContext } from 'react';
+import AuthContext from './store/auth-context';
+import ErrorPage from './pages/ErrorPage';
 
 const App = () => {
+  const authCtx = useContext(AuthContext);
+
+  const PrivateRoute = ({ children }) => {
+    if (!authCtx.isLoggedIn) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return children;
+  };
+
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route
+          path="/login"
+          element={authCtx.isLoggedIn ? <Navigate to="/error" /> : <Login />}
+        />
+        <Route
+          path="/signup"
+          element={authCtx.isLoggedIn ? <Navigate to="/error" /> : <Signup />}
+        />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mypage"
+          element={
+            <PrivateRoute>
+              <Mypage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/lookup" element={<Lookup />} />
         <Route path="/seat" element={<Seat />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
   );
