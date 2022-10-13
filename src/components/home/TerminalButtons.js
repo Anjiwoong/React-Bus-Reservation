@@ -1,21 +1,43 @@
 import styled from 'styled-components';
 import Button from '../UI/Button';
 import { MdChangeCircle } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { ticketActions } from '../../store/ticket-slice';
 
-const TerminalButtons = () => {
+const TerminalButtons = props => {
+  const startTerminal = useSelector(state => state.ticket.location.start);
+  const arrivalTerminal = useSelector(state => state.ticket.location.arrival);
+  const dispatch = useDispatch();
+
+  const startHandler = () => {
+    dispatch(ticketActions.changeDirection(true));
+    props.onShow();
+  };
+
+  const arrivalHandler = () => {
+    dispatch(ticketActions.changeDirection(false));
+    props.onShow();
+  };
+
+  const switchLocationHandler = () => {
+    dispatch(ticketActions.switchLocation());
+  };
+
   return (
     <Wrapper>
       <div>
-        <SelectButton>
+        <SelectButton onClick={startHandler}>
           <p>출발</p>
-          <span>선택</span>
+          <span>{startTerminal}</span>
         </SelectButton>
       </div>
-      <MdChangeCircle />
+      <span>
+        <MdChangeCircle onClick={switchLocationHandler} />
+      </span>
       <div>
-        <SelectButton>
+        <SelectButton onClick={arrivalHandler}>
           <p>도착</p>
-          <span>선택</span>
+          <span>{arrivalTerminal}</span>
         </SelectButton>
       </div>
     </Wrapper>
@@ -29,6 +51,10 @@ const Wrapper = styled.div`
   gap: 30px;
   padding: 65px 0;
 
+  & > span {
+    cursor: pointer;
+  }
+
   div {
     width: 45%;
     display: flex;
@@ -37,7 +63,7 @@ const Wrapper = styled.div`
   }
 
   svg {
-    font-size: ${({ theme }) => theme.size.large};
+    font-size: 60px;
   }
 `;
 

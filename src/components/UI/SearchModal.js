@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Input from './Input';
 import TerminalItem from '../home/TerminalItem';
 import { MdClose } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const terminals = [
   '서울경부',
@@ -29,35 +31,52 @@ const terminals = [
   '이천',
 ];
 
-const Backdrop = () => {
-  return <Dimmed />;
+const Backdrop = props => {
+  return <Dimmed onClick={props.onClose} />;
 };
 
-const ModalOverlay = () => {
+const ModalOverlay = props => {
+  const [terminal, setTerminal] = useState(terminals);
+  const direction = useSelector(state => state.ticket.location.startDirection);
+
+  const searchTerminalHandler = e => {
+    const regExp = new RegExp(e.target.value, 'i');
+
+    const matchedTerminal = terminals.filter(terminal =>
+      terminal.match(regExp)
+    );
+
+    setTerminal(matchedTerminal);
+  };
+
   return (
     <Wrapper>
-      <MdClose />
+      <MdClose onClick={props.onClose} />
       <div>
-        <SearchInput type="search" placeholder="출발 터미널을 검색하세요." />
+        <SearchInput
+          type="search"
+          placeholder={`${direction ? '출발' : '도착'} 터미널을 검색하세요.`}
+          onChange={searchTerminalHandler}
+        />
       </div>
       <ul>
-        {terminals.map((item, idx) => (
-          <TerminalItem key={idx} terminal={item} />
+        {terminal.map((item, idx) => (
+          <TerminalItem key={idx} terminal={item} onClose={props.onClose} />
         ))}
       </ul>
     </Wrapper>
   );
 };
 
-const SearchModal = () => {
+const SearchModal = props => {
   return (
     <>
       {ReactDOM.createPortal(
-        <Backdrop />,
+        <Backdrop onClose={props.onClose} />,
         document.getElementById('backdrop-root')
       )}
       {ReactDOM.createPortal(
-        <ModalOverlay />,
+        <ModalOverlay onClose={props.onClose} />,
         document.getElementById('overlay-root')
       )}
     </>
