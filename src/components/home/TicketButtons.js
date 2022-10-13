@@ -1,12 +1,26 @@
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { ticketActions } from '../../store/ticket-slice';
+
+import styled, { css } from 'styled-components';
 import Button from '../UI/Button';
 
 const TicketButtons = () => {
+  const dispatch = useDispatch();
+  const oneway = useSelector(state => state.ticket.oneway);
+
+  const oneWayHandler = () => dispatch(ticketActions.changeWay('oneway'));
+
+  const roundTripHandler = () => dispatch(ticketActions.changeWay('roundTrip'));
+
   return (
     <Wrapper>
       <div>
-        <TicketButton>왕복</TicketButton>
-        <TicketButton>편도</TicketButton>
+        <TicketButton toggle={oneway} onClick={oneWayHandler}>
+          편도
+        </TicketButton>
+        <TicketButton toggle={!oneway} onClick={roundTripHandler}>
+          왕복
+        </TicketButton>
       </div>
     </Wrapper>
   );
@@ -29,8 +43,24 @@ const TicketButton = styled(Button)`
   background: ${({ theme }) => theme.color.white};
   font-size: ${({ theme }) => theme.size.text};
   font-weight: bold;
-  color: ${({ theme }) => theme.color.gray2};
+  color: ${props =>
+    props.toggle ? props.theme.color.primaryColor : props.theme.color.gray2};
   cursor: pointer;
+  position: relative;
+  ${props =>
+    props.toggle &&
+    css`
+      &::after {
+        content: '';
+        width: 80px;
+        height: 3px;
+        background: ${({ theme }) => theme.color.primaryColor};
+        position: absolute;
+        bottom: -70%;
+        left: -50%;
+        transform: translateX(3px);
+      }
+    `}
 `;
 
 export default TicketButtons;
