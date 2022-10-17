@@ -9,6 +9,7 @@ import Seat from './pages/Seat';
 import { useContext } from 'react';
 import AuthContext from './store/auth-context';
 import ErrorPage from './pages/ErrorPage';
+import { useSelector } from 'react-redux';
 
 const App = () => {
   const authCtx = useContext(AuthContext);
@@ -17,14 +18,24 @@ const App = () => {
     if (!authCtx.isLoggedIn) {
       return <Navigate to="/login" replace />;
     }
-
     return children;
   };
+
+  const { allCheck } = useSelector(state => state.ticket);
 
   return (
     <>
       <Header />
       <Routes>
+        <Route path="/" element={<Navigate replace to="/home" />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/login"
           element={authCtx.isLoggedIn ? <Navigate to="/error" /> : <Login />}
@@ -34,14 +45,6 @@ const App = () => {
           element={authCtx.isLoggedIn ? <Navigate to="/error" /> : <Signup />}
         />
         <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/mypage"
           element={
             <PrivateRoute>
@@ -49,7 +52,7 @@ const App = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/lookup" element={<Lookup />} />
+        {allCheck && <Route path="/home/lookup" element={<Lookup />} />}
         <Route path="/seat" element={<Seat />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>

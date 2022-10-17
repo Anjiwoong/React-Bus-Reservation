@@ -12,6 +12,7 @@ const initialState = {
     arrival: '선택',
   },
   premium: false,
+  allCheck: false,
 };
 
 const ticketSlice = createSlice({
@@ -43,6 +44,9 @@ const ticketSlice = createSlice({
     },
     changeClass(state, action) {
       state.premium = action.payload;
+    },
+    setAllCheck(state, action) {
+      state.allCheck = action.payload;
     },
   },
 });
