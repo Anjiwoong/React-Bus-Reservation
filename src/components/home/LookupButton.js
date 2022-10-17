@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { ticketActions } from '../../store/ticket-slice';
 import Button from '../UI/Button';
 
 const LookupButton = () => {
   const navigate = useNavigate();
-  const [isValid, setIsValid] = useState(false);
+  const dispatch = useDispatch();
 
   const { oneway } = useSelector(state => state.ticket);
 
@@ -18,6 +19,7 @@ const LookupButton = () => {
   const { start: locationStart, arrival: locationArrival } = useSelector(
     state => state.ticket.location
   );
+  const { allCheck } = useSelector(state => state.ticket);
 
   useEffect(() => {
     let allCheck;
@@ -35,19 +37,32 @@ const LookupButton = () => {
         locationArrival !== '선택';
     }
 
-    setIsValid(allCheck);
-  }, [dateArrival, dateStart, locationStart, locationArrival, oneway]);
+    dispatch(ticketActions.setAllCheck(allCheck));
+  }, [
+    dateArrival,
+    dateStart,
+    dispatch,
+    locationArrival,
+    locationStart,
+    oneway,
+  ]);
 
   const navigateHandler = () => {
+    if (locationStart === '선택' && locationArrival === '선택') {
+      alert('출발지와 도착지를 선택해주세요.');
+      return;
+    }
+
     if (locationStart === locationArrival) {
       alert('출발지와 도착지는 같을 수 없습니다.');
       return;
     }
-    if (isValid) navigate('/lookup');
+
+    if (allCheck) navigate('/home/lookup');
   };
 
   return (
-    <Wrapper isActive={isValid} onClick={navigateHandler}>
+    <Wrapper isActive={allCheck} onClick={navigateHandler}>
       <span>배차 조회하기</span>
       <BiChevronRight />
     </Wrapper>

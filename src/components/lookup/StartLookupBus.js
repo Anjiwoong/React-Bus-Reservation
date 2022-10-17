@@ -29,7 +29,7 @@ const StartLookupBus = props => {
 
 const Wrapper = styled.div`
   ul {
-    height: 700px;
+    height: 600px;
     overflow: scroll;
   }
 `;

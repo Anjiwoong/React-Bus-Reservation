@@ -6,11 +6,11 @@ import RouteInfo from '../components/mypage/RouteInfo';
 import StartLookupBus from '../components/lookup/StartLookupBus';
 
 const startTime = [
-  { start: '07 : 10', seat: 8 },
-  { start: '08 : 40', seat: 8 },
-  { start: '09 : 10', seat: 8 },
-  { start: '09 : 40', seat: 8 },
-  { start: '10 : 10', seat: 8 },
+  { start: '07 : 10', seat: 19 },
+  { start: '08 : 40', seat: 20 },
+  { start: '09 : 10', seat: 27 },
+  { start: '09 : 40', seat: 7 },
+  { start: '10 : 10', seat: 13 },
   { start: '10 : 40', seat: 8 },
   { start: '11 : 10', seat: 8 },
   { start: '11 : 40', seat: 8 },
@@ -28,7 +28,7 @@ const startTime = [
 
 const Lookup = () => {
   return (
-    <Layer>
+    <Layer over>
       <Heading>배차 조회</Heading>
       <Card>
         <RouteInfo />

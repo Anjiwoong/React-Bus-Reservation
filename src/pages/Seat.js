@@ -6,7 +6,7 @@ import Layer from '../components/UI/Layer';
 
 const Seat = () => {
   return (
-    <Layer>
+    <Layer over>
       <SeatHeading />
       <BusSeat />
       <SeatPayment />
