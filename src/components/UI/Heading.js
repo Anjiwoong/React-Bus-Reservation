@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Heading = props => {
-  return <Wrapper>{props.children}</Wrapper>;
+  return <Wrapper {...props}>{props.children}</Wrapper>;
 };
 
 const Wrapper = styled.h2`

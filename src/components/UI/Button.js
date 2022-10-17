@@ -11,6 +11,10 @@ const ButtonWrap = styled.button`
   appearance: none;
   cursor: pointer;
   border: none;
+
+  svg {
+    font-size: ${props => props.size};
+  }
 `;
 
 export default Button;

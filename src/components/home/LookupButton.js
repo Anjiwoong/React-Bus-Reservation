@@ -62,7 +62,7 @@ const LookupButton = () => {
   };
 
   return (
-    <Wrapper isActive={allCheck} onClick={navigateHandler}>
+    <Wrapper size="36px" isActive={allCheck} onClick={navigateHandler}>
       <span>배차 조회하기</span>
       <BiChevronRight />
     </Wrapper>
@@ -89,10 +89,6 @@ const Wrapper = styled(Button)`
     css`
       cursor: not-allowed;
     `}
-
-  svg {
-    font-size: ${({ theme }) => theme.size.medium1};
-  }
 `;
 
 export default LookupButton;
