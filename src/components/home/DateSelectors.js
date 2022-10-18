@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import 'react-datepicker/dist/react-datepicker.css';
 import { useContext } from 'react';
 import TerminalContext from '../../store/terminal-context';
 
