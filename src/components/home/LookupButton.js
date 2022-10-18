@@ -1,51 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import TerminalContext from '../../store/terminal-context';
 import { ticketActions } from '../../store/ticket-slice';
 import Button from '../UI/Button';
 
 const LookupButton = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const terminalCtx = useContext(TerminalContext);
 
   const { oneway } = useSelector(state => state.ticket);
 
-  const { start: dateStart, arrival: dateArrival } = useSelector(
-    state => state.ticket.date
+  const { name: locationStart } = useSelector(
+    state => state.ticket.location.start
   );
 
-  const { start: locationStart, arrival: locationArrival } = useSelector(
-    state => state.ticket.location
+  const { name: locationArrival } = useSelector(
+    state => state.ticket.location.arrival
   );
+
   const { allCheck } = useSelector(state => state.ticket);
 
+  const { start } = terminalCtx.date;
+  const { arrival } = terminalCtx.date;
   useEffect(() => {
     let allCheck;
 
     if (oneway) {
       allCheck =
-        dateStart !== '' &&
-        locationStart !== '선택' &&
-        locationArrival !== '선택';
+        start !== '' && locationStart !== '선택' && locationArrival !== '선택';
     } else {
       allCheck =
-        dateStart !== '' &&
-        dateArrival !== '' &&
+        start !== '' &&
+        arrival !== '' &&
         locationStart !== '선택' &&
         locationArrival !== '선택';
     }
 
     dispatch(ticketActions.setAllCheck(allCheck));
-  }, [
-    dateArrival,
-    dateStart,
-    dispatch,
-    locationArrival,
-    locationStart,
-    oneway,
-  ]);
+  }, [start, arrival, dispatch, locationArrival, locationStart, oneway]);
 
   const navigateHandler = () => {
     if (locationStart === '선택' && locationArrival === '선택') {

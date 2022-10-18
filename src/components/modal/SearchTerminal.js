@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import styled from 'styled-components';
 import useHttp from '../../hooks/use-http';
 import Button from '../UI/Button';
 import Input from '../UI/Input';
 import TerminalItem from './TerminalItem';
+import _ from 'lodash';
 
 const API_KEY =
   '1Yt0hh%2F7Sy9VyVvzkqkvQGF68NQ%2BS1UnWTR7%2FL4%2FUsSCS62pr6HZBSaAHRRHhi8gwDmUHChWRPeJZFSAZ4LXeg%3D%3D';
@@ -18,9 +19,11 @@ const SearchTerminal = props => {
 
   useEffect(() => {
     const transformTerminal = terminals => {
+      const data = terminals.response.body;
+      console.log(data);
       let loadedTerminal = [];
 
-      loadedTerminal = terminals.items.item.filter(
+      loadedTerminal = data.items.item.filter(
         terminal => terminal.cityName === props.region
       );
 
@@ -37,15 +40,19 @@ const SearchTerminal = props => {
     );
   }, [sendRequest, props.region]);
 
+  const throttleHandler = useMemo(
+    () => _.throttle(terminal => setTerminals(terminal), 500),
+    []
+  );
+
   const searchTerminalHandler = e => {
     const regExp = new RegExp(e.target.value, 'i');
 
     const matchedTerminal = filteredTerminal.filter(terminal =>
       terminal.terminalNm.match(regExp)
     );
-
+    throttleHandler(matchedTerminal);
     setEnteredValue(e.target.value);
-    setTerminals(matchedTerminal);
   };
 
   return (
@@ -87,7 +94,7 @@ const RightDiv = styled.div`
     width: 100%;
     height: 50px;
     font-size: ${({ theme }) => theme.size.small};
-    border-bottom: 1px solid ${({ theme }) => theme.color.gray3};
+    border-bottom: 1px solid ${({ theme }) => theme.color.bgColor};
     line-height: 50px;
     color: ${({ theme }) => theme.color.primaryFont};
     cursor: pointer;

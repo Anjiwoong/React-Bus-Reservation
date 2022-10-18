@@ -1,17 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ticketActions } from '../../store/ticket-slice';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import { useContext } from 'react';
+import TerminalContext from '../../store/terminal-context';
 
 const DateSelectors = () => {
   const oneway = useSelector(state => state.ticket.oneway);
+  const terminalCtx = useContext(TerminalContext);
   const today = new Date().toISOString().slice(0, 10);
-  const dispatch = useDispatch();
 
   const changeStartDateHandler = e =>
-    dispatch(ticketActions.setStartDate(e.target.value));
+    terminalCtx.setStartTerminal(e.target.value);
 
   const changeArrivalDateHandler = e =>
-    dispatch(ticketActions.setArrivalDate(e.target.value));
+    terminalCtx.setArrivalTerminal(e.target.value);
 
   return (
     <Wrapper>
@@ -29,7 +32,7 @@ const DateSelectors = () => {
           data-placeholder="오는날"
           required
           aria-required="true"
-          min={today}
+          min={terminalCtx.date.start}
           onChange={changeArrivalDateHandler}
         />
       )}
