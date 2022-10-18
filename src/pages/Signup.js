@@ -1,46 +1,22 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { BiErrorCircle } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Input from '../components/UI/Input';
+import useHttp from '../hooks/use-http';
 
 const Signup = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const fetchUser = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNyFg3LGy2o1VHY2BbNXmrIfEGgEYjisk',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            email: emailInputRef.current.value,
-            password: passwordInputRef.current.value,
-            returnSecureToken: true,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+  const { isLoading, error, sendRequest } = useHttp();
 
-      setIsLoading(false);
-
-      if (!response.ok) {
-        throw new Error('이메일 형식을 지켜주세요.');
-      }
-
-      alert('회원가입이 완료되었습니다.');
-      const data = response.json();
-      console.log(data);
-
-      navigate('/login');
-    } catch (error) {
-      alert(error.message);
-    }
+  const fetchUser = () => {
+    alert('회원가입이 완료되었습니다.');
+    navigate('/login');
   };
 
   const submitHandler = e => {
@@ -59,7 +35,20 @@ const Signup = () => {
       return;
     }
 
-    fetchUser();
+    sendRequest(
+      {
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNyFg3LGy2o1VHY2BbNXmrIfEGgEYjisk',
+        method: 'POST',
+        body: {
+          email: emailInputRef.current.value,
+          password: passwordInputRef.current.value,
+          returnSecureToken: true,
+        },
+        headers: { 'Content-Type': 'application/json' },
+      },
+      fetchUser,
+      '이미 존재하는 정보입니다.'
+    );
   };
 
   return (
@@ -67,6 +56,12 @@ const Signup = () => {
       <Title>회원가입</Title>
       <Input type="email" placeholder="이메일" ref={emailInputRef} />
       <Input type="password" placeholder="비밀번호" ref={passwordInputRef} />
+      {error && (
+        <ErrorMessage>
+          <BiErrorCircle />
+          {error}
+        </ErrorMessage>
+      )}
       {!isLoading && <SignupButton>회원가입</SignupButton>}
       {isLoading && <LoadingButton disabled>Loading...</LoadingButton>}
     </Wrapper>
@@ -77,6 +72,19 @@ const Wrapper = styled.form`
   max-width: 600px;
   margin: 100px auto 0;
   text-align: center;
+`;
+
+const ErrorMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  margin-bottom: 20px;
+
+  svg {
+    font-size: ${({ theme }) => theme.size.small};
+    margin: 0 10px;
+  }
 `;
 
 const Title = styled.h2`

@@ -5,7 +5,7 @@ import Button from '../UI/Button';
 
 const ConfirmButton = () => {
   return (
-    <Wrapper>
+    <Wrapper size="36px">
       <span>예매 확인 및 취소</span>
       <BiChevronRight />
     </Wrapper>
@@ -25,10 +25,6 @@ const Wrapper = styled(Button)`
   background: ${({ theme }) => theme.color.primaryColor};
   font-size: ${({ theme }) => theme.size.text};
   color: ${({ theme }) => theme.color.white};
-
-  svg {
-    font-size: ${({ theme }) => theme.size.medium1};
-  }
 `;
 
 export default ConfirmButton;

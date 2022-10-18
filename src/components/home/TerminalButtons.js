@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ticketActions } from '../../store/ticket-slice';
 
 const TerminalButtons = props => {
-  const startTerminal = useSelector(state => state.ticket.location.start);
-  const arrivalTerminal = useSelector(state => state.ticket.location.arrival);
+  const startTerminal = useSelector(state => state.ticket.location.start.name);
+  const arrivalTerminal = useSelector(
+    state => state.ticket.location.arrival.name
+  );
   const dispatch = useDispatch();
 
   const startHandler = () => {
@@ -19,10 +21,6 @@ const TerminalButtons = props => {
     props.onShow();
   };
 
-  const switchLocationHandler = () => {
-    dispatch(ticketActions.switchLocation());
-  };
-
   return (
     <Wrapper>
       <div>
@@ -32,7 +30,8 @@ const TerminalButtons = props => {
         </SelectButton>
       </div>
       <span>
-        <MdChangeCircle onClick={switchLocationHandler} />
+        {/* <MdChangeCircle onClick={switchLocationHandler} /> */}
+        <MdChangeCircle />
       </span>
       <div>
         <SelectButton onClick={arrivalHandler}>

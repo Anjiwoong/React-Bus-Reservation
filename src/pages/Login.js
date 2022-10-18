@@ -1,52 +1,42 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
+import { BiErrorCircle } from 'react-icons/bi';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/UI/Button';
 import Input from '../components/UI/Input';
+import useHttp from '../hooks/use-http';
 import AuthContext from '../store/auth-context';
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const authCtx = useContext(AuthContext);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const navigate = useNavigate();
 
-  const fetchUser = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNyFg3LGy2o1VHY2BbNXmrIfEGgEYjisk',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            email: emailInputRef.current.value,
-            password: passwordInputRef.current.value,
-            returnSecureToken: true,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+  const { isLoading, error, sendRequest } = useHttp();
 
-      setIsLoading(false);
-
-      if (!response.ok) {
-        throw new Error('아이디 또는 비밀번호를 확인해주세요.');
-      }
-
-      const data = await response.json();
-
-      authCtx.login(data.idToken);
-      navigate('/');
-    } catch (error) {
-      alert(error.message);
-    }
+  const fetchUser = data => {
+    authCtx.login(data.idToken);
+    navigate('/');
   };
 
   const submitHandler = e => {
     e.preventDefault();
 
-    fetchUser();
+    sendRequest(
+      {
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNyFg3LGy2o1VHY2BbNXmrIfEGgEYjisk',
+        method: 'POST',
+        body: {
+          email: emailInputRef.current.value,
+          password: passwordInputRef.current.value,
+          returnSecureToken: true,
+        },
+        headers: { 'Content-Type': 'application/json' },
+      },
+      fetchUser,
+      '아이디 또는 비밀번호를 확인해주세요.'
+    );
   };
 
   return (
@@ -54,6 +44,12 @@ const Login = () => {
       <Title>로그인</Title>
       <Input type="email" placeholder="이메일" ref={emailInputRef} />
       <Input type="password" placeholder="비밀번호" ref={passwordInputRef} />
+      {error && (
+        <ErrorMessage>
+          <BiErrorCircle />
+          {error}
+        </ErrorMessage>
+      )}
       {!isLoading && <LoginButton>로그인</LoginButton>}
       {isLoading && <LoadingButton>Loading...</LoadingButton>}
       <SignupLink to="/signup">회원가입</SignupLink>
@@ -70,6 +66,19 @@ const Wrapper = styled.form`
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.size.heading};
   margin-bottom: 30px;
+`;
+
+const ErrorMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  margin-bottom: 20px;
+
+  svg {
+    font-size: ${({ theme }) => theme.size.small};
+    margin: 0 10px;
+  }
 `;
 
 const LoginButton = styled(Button)`

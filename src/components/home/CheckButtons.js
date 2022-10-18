@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ticketActions } from '../../store/ticket-slice';
 
 import styled from 'styled-components';
@@ -8,18 +8,31 @@ const CheckButtons = () => {
 
   const normalSeatHandler = () => dispatch(ticketActions.changeClass(false));
   const premiumSeatHandler = () => dispatch(ticketActions.changeClass(true));
+  const premium = useSelector(state => state.ticket.premium);
 
   return (
     <Wrapper>
       <div>
-        <input type="radio" id="normal" name="busType" defaultChecked />
+        <input
+          type="radio"
+          id="normal"
+          name="busType"
+          checked={!premium}
+          readOnly
+        />
         <label htmlFor="normal" onClick={normalSeatHandler}>
           <CheckIcon></CheckIcon>
           <span>일반</span>
         </label>
       </div>
       <div>
-        <input type="radio" id="premium" name="busType" />
+        <input
+          type="radio"
+          id="premium"
+          name="busType"
+          checked={premium}
+          readOnly
+        />
         <label htmlFor="premium" onClick={premiumSeatHandler}>
           <CheckIcon></CheckIcon>
           <span>우등</span>

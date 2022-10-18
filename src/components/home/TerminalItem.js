@@ -6,17 +6,18 @@ const TerminalItem = props => {
   const direction = useSelector(state => state.ticket.location.startDirection);
   const dispatch = useDispatch();
 
-  const selectTerminalHandler = () => {
-    if (direction) {
-      dispatch(ticketActions.setStartLocation(props.terminal));
-    } else {
-      dispatch(ticketActions.setArrivalLocation(props.terminal));
-    }
+  // const selectTerminalHandler = () => {
+  //   if (direction) {
+  //     dispatch(ticketActions.setStartLocation(props.terminal));
+  //   } else {
+  //     dispatch(ticketActions.setArrivalLocation(props.terminal));
+  //   }
 
-    props.onClose();
-  };
+  //   props.onClose();
+  // };
 
-  return <li onClick={selectTerminalHandler}>{props.terminal}</li>;
+  // return <li onClick={selectTerminalHandler}>{props.terminal}</li>;
+  return <li>{props.terminal}</li>;
 };
 
 export default TerminalItem;
