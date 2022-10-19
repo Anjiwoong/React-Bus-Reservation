@@ -2,22 +2,42 @@ import styled from 'styled-components';
 import Button from '../UI/Button';
 import { MdChangeCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { ticketActions } from '../../store/ticket-slice';
+// import { ticketActions } from '../../store/ticket-slice';
+import { useCallback, useContext } from 'react';
+import TerminalContext from '../../store/terminal-context';
+// import useDidMountEffect from '../../hooks/use-didmount';
 
 const TerminalButtons = props => {
   const startTerminal = useSelector(state => state.ticket.location.start.name);
   const arrivalTerminal = useSelector(
     state => state.ticket.location.arrival.name
   );
-  const dispatch = useDispatch();
+
+  const terminalCtx = useContext(TerminalContext);
+
+  // const dispatch = useDispatch();
 
   const startHandler = () => {
-    dispatch(ticketActions.changeDirection(true));
+    // dispatch(ticketActions.selectStartTerminal(false));
+    terminalCtx.selectStartTerminal(true);
     props.onShow();
   };
 
   const arrivalHandler = () => {
-    dispatch(ticketActions.changeDirection(false));
+    const isAllSelected =
+      startTerminal !== '선택' &&
+      terminalCtx.date.start &&
+      terminalCtx.date.arrival;
+
+    if (!isAllSelected) {
+      alert(
+        '필수선택 항목이 선택되지 않았습니다! 출/도착 날짜와 출발지를 확인해주세요.'
+      );
+      return;
+    }
+
+    // dispatch(ticketActions.selectStartTerminal(false));
+    terminalCtx.selectStartTerminal(false);
     props.onShow();
   };
 
@@ -30,7 +50,6 @@ const TerminalButtons = props => {
         </SelectButton>
       </div>
       <span>
-        {/* <MdChangeCircle onClick={switchLocationHandler} /> */}
         <MdChangeCircle />
       </span>
       <div>

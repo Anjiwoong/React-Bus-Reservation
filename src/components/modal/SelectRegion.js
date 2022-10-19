@@ -1,4 +1,7 @@
-import React from 'react';
+// import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import TerminalContext from '../../store/terminal-context';
+
 import styled from 'styled-components';
 import RegionItem from './RegionItem';
 
@@ -23,19 +26,23 @@ const cityName = [
 ];
 
 const SelectRegion = props => {
+  const terminalCtx = useContext(TerminalContext);
+
   return (
     <LeftDiv>
       <h2>지역 선택</h2>
-      <ul>
-        {cityName.map(city => (
-          <RegionItem
-            selected={props.region === city}
-            key={city}
-            city={city}
-            selectRegion={props.selectRegion}
-          />
-        ))}
-      </ul>
+      {terminalCtx.startTerminal && (
+        <ul>
+          {cityName.map(city => (
+            <RegionItem
+              selected={props.region === city}
+              key={city}
+              city={city}
+              selectRegion={props.selectRegion}
+            />
+          ))}
+        </ul>
+      )}
     </LeftDiv>
   );
 };

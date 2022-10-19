@@ -9,8 +9,12 @@ const DateSelectors = () => {
   const terminalCtx = useContext(TerminalContext);
   const today = new Date().toISOString().slice(0, 10);
 
-  const changeStartDateHandler = e =>
+  const changeStartDateHandler = e => {
+    if (oneway) {
+      terminalCtx.setArrivalTerminal(e.target.value);
+    }
     terminalCtx.setStartTerminal(e.target.value);
+  };
 
   const changeArrivalDateHandler = e =>
     terminalCtx.setArrivalTerminal(e.target.value);
@@ -24,6 +28,7 @@ const DateSelectors = () => {
         aria-required="true"
         min={today}
         onChange={changeStartDateHandler}
+        value={terminalCtx.date.start}
       />
       {!oneway && (
         <DateInput
@@ -33,6 +38,7 @@ const DateSelectors = () => {
           aria-required="true"
           min={terminalCtx.date.start}
           onChange={changeArrivalDateHandler}
+          value={terminalCtx.date.arrival}
         />
       )}
     </Wrapper>

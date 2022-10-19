@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import styled from 'styled-components';
 import useHttp from '../../hooks/use-http';
-import Button from '../UI/Button';
 import Input from '../UI/Input';
 import TerminalItem from './TerminalItem';
 import _ from 'lodash';
@@ -40,7 +39,7 @@ const SearchTerminal = props => {
     );
   }, [sendRequest, props.region]);
 
-  const throttleHandler = useMemo(
+  const throttle = useMemo(
     () => _.throttle(terminal => setTerminals(terminal), 500),
     []
   );
@@ -51,7 +50,7 @@ const SearchTerminal = props => {
     const matchedTerminal = filteredTerminal.filter(terminal =>
       terminal.terminalNm.match(regExp)
     );
-    throttleHandler(matchedTerminal);
+    throttle(matchedTerminal);
     setEnteredValue(e.target.value);
   };
 
@@ -64,9 +63,7 @@ const SearchTerminal = props => {
           onChange={searchTerminalHandler}
           value={enteredValue}
         />
-        <Button>
-          <BiSearch />
-        </Button>
+        <BiSearch />
       </SearchForm>
       <ul>
         {!isLoading &&
@@ -108,7 +105,7 @@ const RightDiv = styled.div`
 const SearchForm = styled.form`
   position: relative;
 
-  button > svg {
+  svg {
     font-size: ${({ theme }) => theme.size.small};
   }
 `;

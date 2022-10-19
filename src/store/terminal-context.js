@@ -5,24 +5,32 @@ const TerminalContext = React.createContext({
     start: '',
     arrival: '',
   },
-
-  setStartTerminal: terminal => {},
+  startTerminal: '',
+  setStartTerminal: state => {},
+  setArrivalTerminal: state => {},
+  selectStartTerminal: state => {},
 });
 
 export const TerminalContextProvider = props => {
-  const [startDate, setStartDate] = useState('');
-  const [arrivalDate, setArrivalDate] = useState('');
+  const [enteredstartDate, setEnteredStartDate] = useState('');
+  const [enteredarrivalDate, setEnteredArrivalDate] = useState('');
+  const [isStartTerminal, setIsStartTerminal] = useState(true);
 
-  const setStartTerminal = terminal => setStartDate(terminal);
-  const setArrivalTerminal = terminal => setArrivalDate(terminal);
+  const setStartTerminal = terminal => setEnteredStartDate(terminal);
+
+  const setArrivalTerminal = terminal => setEnteredArrivalDate(terminal);
+
+  const selectStartTerminal = state => setIsStartTerminal(state);
 
   const contextValue = {
     date: {
-      start: startDate,
-      arrival: arrivalDate,
+      start: enteredstartDate,
+      arrival: enteredarrivalDate,
     },
-    setStartTerminal: setStartTerminal,
-    setArrivalTerminal: setArrivalTerminal,
+    startTerminal: isStartTerminal,
+    setStartTerminal,
+    setArrivalTerminal,
+    selectStartTerminal,
   };
 
   return (
