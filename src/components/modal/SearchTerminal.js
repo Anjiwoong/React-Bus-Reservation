@@ -1,44 +1,70 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import useHttp from '../../hooks/use-http';
 import Button from '../UI/Button';
 import Input from '../UI/Input';
 import TerminalItem from './TerminalItem';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
+import DateContext from '../../store/date-context';
 
 const API_KEY =
   '1Yt0hh%2F7Sy9VyVvzkqkvQGF68NQ%2BS1UnWTR7%2FL4%2FUsSCS62pr6HZBSaAHRRHhi8gwDmUHChWRPeJZFSAZ4LXeg%3D%3D';
 
-const SearchTerminal = props => {
+const SearchTerminal = ({ region, onClose }) => {
   const [terminals, setTerminals] = useState([]);
   const [filteredTerminal, setFilteredTerminal] = useState([]);
   const [enteredValue, setEnteredValue] = useState('');
 
+  const direction = useSelector(state => state.ticket.location.startDirection);
+  const startTerminalCode = useSelector(
+    state => state.ticket.location.start.terminalCode
+  );
+  const isSelectedStart = useSelector(
+    state => state.ticket.location.startDirection
+  );
+  const dateCtx = useContext(DateContext);
   const { isLoading, sendRequest } = useHttp();
+
+  const { start } = dateCtx.date;
 
   useEffect(() => {
     const transformTerminal = terminals => {
-      const data = terminals.response.body;
-      console.log(data);
       let loadedTerminal = [];
+      const data = terminals.response.body;
 
-      loadedTerminal = data.items.item.filter(
-        terminal => terminal.cityName === props.region
-      );
+      if (direction) {
+        loadedTerminal = data.items.item.filter(
+          terminal => terminal.cityName === region
+        );
+      } else {
+        loadedTerminal = _.uniqBy(data.items.item, 'arrPlaceNm');
+      }
 
       setTerminals(loadedTerminal);
       setFilteredTerminal(loadedTerminal);
       setEnteredValue('');
     };
-
+    let URL = `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getSuberbsBusTrminlList?numOfRows=2117&pageNo=1&serviceKey=${API_KEY}&_type=json`;
+    if (!direction) {
+      const startDate = start.replaceAll('-', '');
+      URL = `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo?serviceKey=${API_KEY}&depTerminalId=${startTerminalCode}&depPlandTime=${startDate}&numOfRows=2117&_type=json`;
+    }
     sendRequest(
       {
-        url: `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getSuberbsBusTrminlList?numOfRows=2117&pageNo=1&serviceKey=${API_KEY}&_type=json`,
+        url: URL,
       },
       transformTerminal
     );
-  }, [sendRequest, props.region]);
+  }, [
+    sendRequest,
+    region,
+    direction,
+    startTerminalCode,
+    start,
+    isSelectedStart,
+  ]);
 
   const throttleHandler = useMemo(
     () => _.throttle(terminal => setTerminals(terminal), 500),
@@ -48,15 +74,16 @@ const SearchTerminal = props => {
   const searchTerminalHandler = e => {
     const regExp = new RegExp(e.target.value, 'i');
 
-    const matchedTerminal = filteredTerminal.filter(terminal =>
-      terminal.terminalNm.match(regExp)
-    );
+    const matchedTerminal = filteredTerminal.filter(terminal => {
+      if (direction) return terminal.terminalNm.match(regExp);
+      return terminal.arrPlaceNm.match(regExp);
+    });
     throttleHandler(matchedTerminal);
     setEnteredValue(e.target.value);
   };
 
   return (
-    <RightDiv>
+    <RightDiv arrival={!direction}>
       <SearchForm>
         <Input
           modal
@@ -70,9 +97,17 @@ const SearchTerminal = props => {
       </SearchForm>
       <ul>
         {!isLoading &&
-          terminals.map(terminal => (
-            <TerminalItem key={terminal.terminalId} terminal={terminal} />
+          terminals &&
+          terminals.map((terminal, i) => (
+            <TerminalItem
+              key={direction ? terminal.terminalId : i}
+              terminal={terminal}
+              onClose={onClose}
+            />
           ))}
+        {!terminals.length && !isLoading && (
+          <LoadingMessage>일치하는 정보가 없습니다.</LoadingMessage>
+        )}
         {isLoading && <LoadingMessage>Loading...</LoadingMessage>}
       </ul>
     </RightDiv>
@@ -82,6 +117,12 @@ const SearchTerminal = props => {
 const RightDiv = styled.div`
   width: 50%;
   padding-left: 30px;
+
+  ${props =>
+    props.arrival &&
+    css`
+      width: 100%;
+    `}
 
   ul {
     text-align: center;

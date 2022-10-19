@@ -2,18 +2,16 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { useContext } from 'react';
-import TerminalContext from '../../store/terminal-context';
+import DateContext from '../../store/date-context';
 
 const DateSelectors = () => {
   const oneway = useSelector(state => state.ticket.oneway);
-  const terminalCtx = useContext(TerminalContext);
+  const dateCtx = useContext(DateContext);
   const today = new Date().toISOString().slice(0, 10);
 
-  const changeStartDateHandler = e =>
-    terminalCtx.setStartTerminal(e.target.value);
+  const changeStartDateHandler = e => dateCtx.setStartDate(e.target.value);
 
-  const changeArrivalDateHandler = e =>
-    terminalCtx.setArrivalTerminal(e.target.value);
+  const changeArrivalDateHandler = e => dateCtx.setArrivalDate(e.target.value);
 
   return (
     <Wrapper>
@@ -24,6 +22,7 @@ const DateSelectors = () => {
         aria-required="true"
         min={today}
         onChange={changeStartDateHandler}
+        value={dateCtx.date.start}
       />
       {!oneway && (
         <DateInput
@@ -31,8 +30,9 @@ const DateSelectors = () => {
           data-placeholder="오는날"
           required
           aria-required="true"
-          min={terminalCtx.date.start}
+          min={dateCtx.date.start}
           onChange={changeArrivalDateHandler}
+          value={dateCtx.date.arrival}
         />
       )}
     </Wrapper>

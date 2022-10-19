@@ -3,14 +3,25 @@ import { ticketActions } from '../../store/ticket-slice';
 
 import styled, { css } from 'styled-components';
 import Button from '../UI/Button';
+import { useContext } from 'react';
+import DateContext from '../../store/date-context';
 
 const TicketButtons = () => {
   const dispatch = useDispatch();
   const oneway = useSelector(state => state.ticket.oneway);
+  const dateCtx = useContext(DateContext);
 
-  const oneWayHandler = () => dispatch(ticketActions.changeWay(true));
+  const oneWayHandler = () => {
+    dispatch(ticketActions.changeWay(true));
+    dispatch(ticketActions.reset());
+    dateCtx.resetHandler();
+  };
 
-  const roundTripHandler = () => dispatch(ticketActions.changeWay(false));
+  const roundTripHandler = () => {
+    dispatch(ticketActions.changeWay(false));
+    dispatch(ticketActions.reset());
+    dateCtx.resetHandler();
+  };
 
   return (
     <Wrapper>

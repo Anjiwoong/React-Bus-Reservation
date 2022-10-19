@@ -3,23 +3,45 @@ import Button from '../UI/Button';
 import { MdChangeCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { ticketActions } from '../../store/ticket-slice';
+import { useContext } from 'react';
+import DateContext from '../../store/date-context';
 
 const TerminalButtons = props => {
   const startTerminal = useSelector(state => state.ticket.location.start.name);
   const arrivalTerminal = useSelector(
     state => state.ticket.location.arrival.name
   );
+  const oneway = useSelector(state => state.ticket.oneway);
+  const dateCtx = useContext(DateContext);
+
   const dispatch = useDispatch();
 
   const startHandler = () => {
+    if (oneway && dateCtx.date.start === '') {
+      alert('가는날을 설정해주세요.');
+      return;
+    }
+
+    if (!oneway && (dateCtx.date.start === '' || dateCtx.date.arrival === '')) {
+      alert('가는날과 오는날을 설정해주세요.');
+      return;
+    }
+
     dispatch(ticketActions.changeDirection(true));
     props.onShow();
   };
 
   const arrivalHandler = () => {
+    if (startTerminal === '선택') {
+      alert('출발지를 먼저 설정해주세요.');
+      return;
+    }
+
     dispatch(ticketActions.changeDirection(false));
     props.onShow();
   };
+
+  const switchLocationHandler = () => dispatch(ticketActions.switchLocation());
 
   return (
     <Wrapper>
@@ -30,8 +52,7 @@ const TerminalButtons = props => {
         </SelectButton>
       </div>
       <span>
-        {/* <MdChangeCircle onClick={switchLocationHandler} /> */}
-        <MdChangeCircle />
+        <MdChangeCircle onClick={switchLocationHandler} />
       </span>
       <div>
         <SelectButton onClick={arrivalHandler}>

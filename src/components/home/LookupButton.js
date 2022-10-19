@@ -3,14 +3,14 @@ import { BiChevronRight } from 'react-icons/bi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import TerminalContext from '../../store/terminal-context';
+import DateContext from '../../store/date-context';
 import { ticketActions } from '../../store/ticket-slice';
 import Button from '../UI/Button';
 
 const LookupButton = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const terminalCtx = useContext(TerminalContext);
+  const dateCtx = useContext(DateContext);
 
   const { oneway } = useSelector(state => state.ticket);
 
@@ -24,8 +24,8 @@ const LookupButton = () => {
 
   const { allCheck } = useSelector(state => state.ticket);
 
-  const { start } = terminalCtx.date;
-  const { arrival } = terminalCtx.date;
+  const { start, arrival } = dateCtx.date;
+
   useEffect(() => {
     let allCheck;
 
