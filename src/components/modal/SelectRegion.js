@@ -49,6 +49,8 @@ const LeftDiv = styled.div`
     flex-wrap: wrap;
     margin-top: 22px;
     gap: 6px;
+    height: 360px;
+    overflow: scroll;
   }
 `;
 

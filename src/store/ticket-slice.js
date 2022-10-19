@@ -8,10 +8,12 @@ const initialState = {
       name: '선택',
       terminalCode: '',
     },
-    arrival: { name: '선택', terminalCode: '' },
+    arrival: { name: '선택' },
   },
+  charge: 0,
   premium: false,
   allCheck: false,
+  ticketInfo: {},
 };
 
 const ticketSlice = createSlice({
@@ -30,16 +32,26 @@ const ticketSlice = createSlice({
     setArrivalLocation(state, action) {
       state.location.arrival = action.payload;
     },
-    // switchLocation(state) {
-    //   let temp = state.location.start;
-    //   state.location.start = state.location.arrival;
-    //   state.location.arrival = temp;
-    // },
+    switchLocation(state) {
+      let temp = state.location.start;
+      state.location.start = state.location.arrival;
+      state.location.arrival = temp;
+    },
     changeClass(state, action) {
       state.premium = action.payload;
     },
     setAllCheck(state, action) {
       state.allCheck = action.payload;
+    },
+    setCharge(state, action) {
+      state.charge = action.payload;
+    },
+
+    reset(state) {
+      state.location.startDirection = true;
+      state.location.start.name = '선택';
+      state.location.start.terminalCode = '';
+      state.location.arrival.name = '선택';
     },
   },
 });
