@@ -1,13 +1,53 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import useHttp from '../../hooks/use-http';
+import DateContext from '../../store/date-context';
 import SelectSeatItem from './SelectSeatItem';
 
+const API_KEY =
+  '1Yt0hh%2F7Sy9VyVvzkqkvQGF68NQ%2BS1UnWTR7%2FL4%2FUsSCS62pr6HZBSaAHRRHhi8gwDmUHChWRPeJZFSAZ4LXeg%3D%3D';
+
 const StartLookupBus = props => {
+  const [terminals, setTerminals] = useState([]);
+
+  const dateCtx = useContext(DateContext);
+  const startTerminalCode = useSelector(
+    state => state.ticket.location.start.terminalCode
+  );
+  const arrivalTerminal = useSelector(
+    state => state.ticket.location.arrival.name
+  );
+
+  const { isLoading, sendRequest } = useHttp();
+
+  const { start } = dateCtx.date;
+
+  useEffect(() => {
+    const transformStartTime = time => {
+      let loadedStartTime = [];
+      const data = time.response.body;
+      loadedStartTime = data.items.item.filter(
+        terminal => terminal.arrPlaceNm === arrivalTerminal
+      );
+      setTerminals(loadedStartTime);
+    };
+
+    const startDate = start.replaceAll('-', '');
+
+    sendRequest(
+      {
+        url: `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo?serviceKey=${API_KEY}&depTerminalId=${startTerminalCode}&depPlandTime=${startDate}&numOfRows=2117&_type=json`,
+      },
+      transformStartTime
+    );
+  }, [sendRequest, start, startTerminalCode, arrivalTerminal]);
+
   return (
     <Wrapper>
       <StartBusTime>
         <span>가는 날 배차 조회</span>
-        <span>2022-10-10</span>
+        <span>{dateCtx.date.start}</span>
       </StartBusTime>
       <StartBusItem>
         <span>출발</span>
@@ -15,13 +55,16 @@ const StartLookupBus = props => {
         <span>잔여석</span>
       </StartBusItem>
       <ul>
-        {props.timeList.map(time => (
-          <SelectSeatItem
-            key={time.start}
-            start={time.start}
-            seat={time.seat}
-          />
-        ))}
+        {!isLoading &&
+          terminals.map(bus => (
+            <SelectSeatItem
+              key={bus.depPlandTime}
+              start={bus.depPlandTime}
+              arrival={bus.arrPlandTime}
+              seat={bus.seat}
+            />
+          ))}
+        {isLoading && <p>Loading...</p>}
       </ul>
     </Wrapper>
   );

@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   oneway: true,
   location: {
-    startDirection: true,
     start: {
       name: '선택',
       terminalCode: '',
@@ -22,9 +21,6 @@ const ticketSlice = createSlice({
   reducers: {
     changeWay(state, action) {
       state.oneway = action.payload;
-    },
-    changeDirection(state, action) {
-      state.location.startDirection = action.payload;
     },
     setStartLocation(state, action) {
       state.location.start = action.payload;
@@ -48,7 +44,6 @@ const ticketSlice = createSlice({
     },
 
     reset(state) {
-      state.location.startDirection = true;
       state.location.start.name = '선택';
       state.location.start.terminalCode = '';
       state.location.arrival.name = '선택';

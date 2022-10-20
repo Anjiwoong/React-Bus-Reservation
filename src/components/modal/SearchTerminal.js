@@ -17,24 +17,21 @@ const SearchTerminal = ({ region, onClose }) => {
   const [filteredTerminal, setFilteredTerminal] = useState([]);
   const [enteredValue, setEnteredValue] = useState('');
 
-  const direction = useSelector(state => state.ticket.location.startDirection);
   const startTerminalCode = useSelector(
     state => state.ticket.location.start.terminalCode
   );
-  const isSelectedStart = useSelector(
-    state => state.ticket.location.startDirection
-  );
-  const dateCtx = useContext(DateContext);
   const { isLoading, sendRequest } = useHttp();
+  const dateCtx = useContext(DateContext);
 
   const { start } = dateCtx.date;
+  const { startTerminal } = dateCtx;
 
   useEffect(() => {
     const transformTerminal = terminals => {
       let loadedTerminal = [];
       const data = terminals.response.body;
 
-      if (direction) {
+      if (startTerminal) {
         loadedTerminal = data.items.item.filter(
           terminal => terminal.cityName === region
         );
@@ -47,7 +44,7 @@ const SearchTerminal = ({ region, onClose }) => {
       setEnteredValue('');
     };
     let URL = `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getSuberbsBusTrminlList?numOfRows=2117&pageNo=1&serviceKey=${API_KEY}&_type=json`;
-    if (!direction) {
+    if (!startTerminal) {
       const startDate = start.replaceAll('-', '');
       URL = `http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo?serviceKey=${API_KEY}&depTerminalId=${startTerminalCode}&depPlandTime=${startDate}&numOfRows=2117&_type=json`;
     }
@@ -57,14 +54,7 @@ const SearchTerminal = ({ region, onClose }) => {
       },
       transformTerminal
     );
-  }, [
-    sendRequest,
-    region,
-    direction,
-    startTerminalCode,
-    start,
-    isSelectedStart,
-  ]);
+  }, [sendRequest, region, startTerminalCode, start, startTerminal]);
 
   const throttleHandler = useMemo(
     () => _.throttle(terminal => setTerminals(terminal), 500),
@@ -75,7 +65,7 @@ const SearchTerminal = ({ region, onClose }) => {
     const regExp = new RegExp(e.target.value, 'i');
 
     const matchedTerminal = filteredTerminal.filter(terminal => {
-      if (direction) return terminal.terminalNm.match(regExp);
+      if (dateCtx.startTerminal) return terminal.terminalNm.match(regExp);
       return terminal.arrPlaceNm.match(regExp);
     });
     throttleHandler(matchedTerminal);
@@ -83,7 +73,7 @@ const SearchTerminal = ({ region, onClose }) => {
   };
 
   return (
-    <RightDiv arrival={!direction}>
+    <RightDiv arrival={!dateCtx.startTerminal}>
       <SearchForm>
         <Input
           modal
@@ -97,15 +87,15 @@ const SearchTerminal = ({ region, onClose }) => {
       </SearchForm>
       <ul>
         {!isLoading &&
-          terminals &&
+          terminals.length > 0 &&
           terminals.map((terminal, i) => (
             <TerminalItem
-              key={direction ? terminal.terminalId : i}
+              key={dateCtx.startTerminal ? terminal.terminalId : i}
               terminal={terminal}
               onClose={onClose}
             />
           ))}
-        {!terminals.length && !isLoading && (
+        {!isLoading && terminals.length === 0 && (
           <LoadingMessage>일치하는 정보가 없습니다.</LoadingMessage>
         )}
         {isLoading && <LoadingMessage>Loading...</LoadingMessage>}
@@ -122,6 +112,7 @@ const RightDiv = styled.div`
     props.arrival &&
     css`
       width: 100%;
+      padding-left: 0;
     `}
 
   ul {

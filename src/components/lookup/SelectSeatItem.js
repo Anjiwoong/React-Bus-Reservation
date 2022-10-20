@@ -1,14 +1,55 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Button from '../UI/Button';
 
 const SelectSeatItem = props => {
+  const startTime = props.start.toString().substr(8);
+  const formattedStartTime = [
+    startTime.slice(0, 2),
+    ' : ',
+    startTime.slice(2),
+  ].join('');
+
+  const calcElapsedTime = (start, arrival) => {
+    const formattedStartTime = start.toString().split('');
+    const formattedArrivalTime = arrival.toString().split('');
+
+    const date1 = new Date(
+      formattedStartTime.slice(0, 4).join(''),
+      formattedStartTime.slice(4, 6).join(''),
+      formattedStartTime.slice(6, 8).join(''),
+      formattedStartTime.slice(8, 10).join(''),
+      formattedStartTime.slice(10, 12).join('')
+    );
+
+    const date2 = new Date(
+      formattedArrivalTime.slice(0, 4).join(''),
+      formattedArrivalTime.slice(4, 6).join(''),
+      formattedArrivalTime.slice(6, 8).join(''),
+      formattedArrivalTime.slice(8, 10).join(''),
+      formattedArrivalTime.slice(10, 12).join('')
+    );
+
+    const elapsedTime = date2.getTime() - date1.getTime();
+    const elapsedMinute = elapsedTime / 1000 / 60;
+    const hour = parseInt(elapsedMinute / 60);
+    const minute = elapsedMinute % 60;
+
+    return [hour, minute];
+  };
+
+  const [hour, minute] = calcElapsedTime(props.start, props.arrival);
+
+  const seat = Math.floor(Math.random() * 27);
+
   return (
-    <SelectSeat>
-      <span>{props.start}</span>
-      <span>2시간 40분</span>
-      <span>{props.seat}석</span>
-      <Button>좌석선택</Button>
+    <SelectSeat disabled={seat === 0}>
+      <span>{formattedStartTime}</span>
+      <span>
+        {hour > 1 ? hour + '시간' : ''} {minute}분
+      </span>
+      <span>{seat}석</span>
+      <Button disabled={seat === 0}>좌석선택</Button>
     </SelectSeat>
   );
 };
@@ -40,6 +81,16 @@ const SelectSeat = styled.li`
       color: ${({ theme }) => theme.color.primaryColor};
     }
   }
+
+  ${props =>
+    props.disabled &&
+    css`
+      button {
+        &:hover {
+          color: ${({ theme }) => theme.color.gray2};
+        }
+      }
+    `}
 `;
 
 export default SelectSeatItem;

@@ -5,15 +5,17 @@ const DateContext = React.createContext({
     start: '',
     arrival: '',
   },
-
+  startTerminal: true,
   setStartDate: date => {},
   setArrivalDate: date => {},
+  selectedStartTerminal: state => {},
   resetHandler: () => {},
 });
 
 export const DateContextProvider = props => {
   const [startDate, setStartDate] = useState('');
   const [arrivalDate, setArrivalDate] = useState('');
+  const [isStartTerminal, setIsStartTerminal] = useState(true);
 
   const setStartDateHandler = date => setStartDate(date);
   const setArrivalDateHandler = date => setArrivalDate(date);
@@ -21,7 +23,10 @@ export const DateContextProvider = props => {
   const resetHandler = () => {
     setStartDate('');
     setArrivalDate('');
+    setIsStartTerminal(true);
   };
+
+  const selectedStartTerminal = state => setIsStartTerminal(state);
 
   const contextValue = {
     date: {
@@ -30,6 +35,8 @@ export const DateContextProvider = props => {
     },
     setStartDate: setStartDateHandler,
     setArrivalDate: setArrivalDateHandler,
+    startTerminal: isStartTerminal,
+    selectedStartTerminal: selectedStartTerminal,
     resetHandler: resetHandler,
   };
 

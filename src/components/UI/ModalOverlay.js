@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 import SelectRegion from '../modal/SelectRegion';
 import SearchTerminal from '../modal/SearchTerminal';
-import { useSelector } from 'react-redux';
+import DateContext from '../../store/date-context';
 
 const ModalOverlay = props => {
   const [region, setRegion] = useState('서울특별시');
-  const isSelectedStart = useSelector(
-    state => state.ticket.location.startDirection
-  );
+  const dateCtx = useContext(DateContext);
 
   const selectRegionHandler = region => setRegion(region);
 
   return (
     <Wrapper>
-      {isSelectedStart && (
+      {dateCtx.startTerminal && (
         <SelectRegion region={region} selectRegion={selectRegionHandler} />
       )}
       <SearchTerminal region={region} onClose={props.onClose} />

@@ -20,7 +20,7 @@ const DateSelectors = () => {
         data-placeholder="가는날"
         required
         aria-required="true"
-        min={today}
+        // min={today}
         onChange={changeStartDateHandler}
         value={dateCtx.date.start}
       />
