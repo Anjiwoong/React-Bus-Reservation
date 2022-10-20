@@ -1,18 +1,22 @@
 import React from 'react';
 import { CgArrowLongRightC } from 'react-icons/cg';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const RouteInfo = () => {
+  const start = useSelector(state => state.ticket.location.start.name);
+  const arrival = useSelector(state => state.ticket.location.arrival.name);
+
   return (
     <Wrapper>
       <Start>
         <p>출발</p>
-        <span>선택</span>
+        <span>{start}</span>
       </Start>
       <CgArrowLongRightC />
       <Arrival>
         <p>도착</p>
-        <span>선택</span>
+        <span>{arrival}</span>
       </Arrival>
     </Wrapper>
   );

@@ -1,35 +1,36 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import DateContext from '../../store/date-context';
 import { ticketActions } from '../../store/ticket-slice';
 
 const TerminalItem = ({ terminal, onClose }) => {
   const dispatch = useDispatch();
-
-  const direction = useSelector(state => state.ticket.location.startDirection);
+  const dateCtx = useContext(DateContext);
+  const { terminalNm, terminalId, arrPlaceNm, charge } = terminal;
 
   const selectedTerminal = () => {
-    if (direction) {
+    if (dateCtx.startTerminal) {
       dispatch(
         ticketActions.setStartLocation({
-          name: terminal.terminalNm,
-          terminalCode: terminal.terminalId,
+          name: terminalNm,
+          terminalCode: terminalId,
         })
       );
     } else {
       dispatch(
         ticketActions.setArrivalLocation({
-          name: terminal.arrPlaceNm,
+          name: arrPlaceNm,
         })
       );
-      dispatch(ticketActions.setCharge(terminal.charge));
+      dispatch(ticketActions.setCharge(charge));
     }
 
     onClose();
   };
 
   return (
-    <li key={terminal.terminalId} onClick={selectedTerminal}>
-      <span>{direction ? terminal.terminalNm : terminal.arrPlaceNm}</span>
+    <li key={terminalId} onClick={selectedTerminal}>
+      <span>{dateCtx.startTerminal ? terminalNm : arrPlaceNm}</span>
     </li>
   );
 };

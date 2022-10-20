@@ -27,7 +27,7 @@ const TerminalButtons = props => {
       return;
     }
 
-    dispatch(ticketActions.changeDirection(true));
+    dateCtx.selectedStartTerminal(true);
     props.onShow();
   };
 
@@ -37,7 +37,7 @@ const TerminalButtons = props => {
       return;
     }
 
-    dispatch(ticketActions.changeDirection(false));
+    dateCtx.selectedStartTerminal(false);
     props.onShow();
   };
 
