@@ -1,8 +1,14 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { ticketActions } from '../../store/ticket-slice';
 import Button from '../UI/Button';
 
 const SelectSeatItem = props => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
   const startTime = props.start.toString().substr(8);
   const formattedStartTime = [
     startTime.slice(0, 2),
@@ -42,6 +48,16 @@ const SelectSeatItem = props => {
 
   const seat = Math.floor(Math.random() * 27);
 
+  const selectSeatHandler = () => {
+    if (startRemainSeat === null) {
+      dispatch(ticketActions.setStartRemainingSeat(seat));
+    } else {
+      dispatch(ticketActions.setArrivalRemainingSeat(seat));
+    }
+
+    navigate('seat');
+  };
+
   return (
     <SelectSeat disabled={seat === 0}>
       <span>{formattedStartTime}</span>
@@ -49,7 +65,9 @@ const SelectSeatItem = props => {
         {hour > 1 ? hour + '시간' : ''} {minute}분
       </span>
       <span>{seat}석</span>
-      <Button disabled={seat === 0}>좌석선택</Button>
+      <Button to="seat" disabled={seat === 0} onClick={selectSeatHandler}>
+        좌석선택
+      </Button>
     </SelectSeat>
   );
 };

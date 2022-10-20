@@ -13,13 +13,13 @@ const TicketButtons = () => {
 
   const oneWayHandler = () => {
     dispatch(ticketActions.changeWay(true));
-    dispatch(ticketActions.reset());
+    dispatch(ticketActions.resetWay());
     dateCtx.resetHandler();
   };
 
   const roundTripHandler = () => {
     dispatch(ticketActions.changeWay(false));
-    dispatch(ticketActions.reset());
+    dispatch(ticketActions.resetWay());
     dateCtx.resetHandler();
   };
 

@@ -1,16 +1,28 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const SeatHeading = () => {
+  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
+  const arrivalRemainSeat = useSelector(
+    state => state.ticket.seat.arrival.remain
+  );
+
   return (
     <Wrapper>
       <p>좌석 선택</p>
       <div>
         <p>
-          전체 <AllSeat>27</AllSeat> 석
+          전체 <AllSeat>27</AllSeat>석
         </p>
         <p>
-          잔여 <LeftSeat>27</LeftSeat> 석
+          잔여
+          <LeftSeat>
+            {arrivalRemainSeat === null
+              ? ' ' + startRemainSeat
+              : ' ' + arrivalRemainSeat}
+          </LeftSeat>
+          석
         </p>
       </div>
     </Wrapper>

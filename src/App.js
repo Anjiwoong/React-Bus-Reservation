@@ -53,7 +53,7 @@ const App = () => {
           }
         />
         {allCheck && <Route path="/home/lookup" element={<Lookup />} />}
-        <Route path="/seat" element={<Seat />} />
+        {allCheck && <Route path="/home/lookup/seat" element={<Seat />} />}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
