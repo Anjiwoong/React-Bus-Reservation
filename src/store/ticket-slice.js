@@ -9,10 +9,19 @@ const initialState = {
     },
     arrival: { name: '선택' },
   },
+  seat: {
+    start: {
+      remain: null,
+      selected: [],
+    },
+    arrival: {
+      remain: null,
+      selected: [],
+    },
+  },
   charge: 0,
   premium: false,
   allCheck: false,
-  ticketInfo: {},
 };
 
 const ticketSlice = createSlice({
@@ -42,11 +51,48 @@ const ticketSlice = createSlice({
     setCharge(state, action) {
       state.charge = action.payload;
     },
-
-    reset(state) {
+    setStartRemainingSeat(state, action) {
+      state.seat.start.remain = action.payload;
+    },
+    setArrivalRemainingSeat(state, action) {
+      state.seat.arrival.remain = action.payload;
+    },
+    setSelectedSeat(state, action) {
+      if (state.seat.arrival.remain === null) {
+        if (state.seat.start.selected.indexOf(action.payload) === -1) {
+          state.seat.start.selected.push(action.payload);
+        } else {
+          state.seat.start.selected = state.seat.start.selected.filter(
+            item => item !== action.payload
+          );
+        }
+      } else {
+        if (state.seat.arrival.selected.indexOf(action.payload) === -1) {
+          state.seat.arrival.selected.push(action.payload);
+        } else {
+          state.seat.arrival.selected = state.seat.arrival.selected.filter(
+            item => item !== action.payload
+          );
+        }
+      }
+    },
+    resetWay(state) {
       state.location.start.name = '선택';
       state.location.start.terminalCode = '';
       state.location.arrival.name = '선택';
+    },
+    reset(state) {
+      state.oneway = true;
+      state.location.start.name = '선택';
+      state.location.start.terminalCode = '';
+      state.location.arrival.name = '선택';
+      state.seat.start.remain = null;
+      state.seat.start.selected = [];
+      state.seat.arrival.remain = null;
+      state.seat.arrival.selected = [];
+      state.charge = 0;
+      state.premium = false;
+      state.allCheck = false;
     },
   },
 });

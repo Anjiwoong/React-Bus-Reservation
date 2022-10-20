@@ -1,38 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BusSeatItem from './BusSeatItem';
 
-const seatNumber = [
-  { number: 1, full: false },
-  { number: 2, full: false },
-  { number: 3, full: false },
-  { number: 4, full: false },
-  { number: 5, full: false },
-  { number: 6, full: false },
-  { number: 7, full: false },
-  { number: 8, full: false },
-  { number: 9, full: false },
-  { number: 10, full: false },
-  { number: 11, full: true },
-  { number: 12, full: false },
-  { number: 13, full: false },
-  { number: 14, full: false },
-  { number: 15, full: false },
-  { number: 16, full: false },
-  { number: 17, full: false },
-  { number: 18, full: false },
-  { number: 19, full: true },
-  { number: 20, full: false },
-  { number: 21, full: false },
-  { number: 22, full: true },
-  { number: 23, full: false },
-  { number: 24, full: false },
-  { number: 25, full: false },
-  { number: 26, full: false },
-  { number: 27, full: false },
-];
+const BusSeat = props => {
+  const [remainSeatArr, setRemainSeatArr] = useState([]);
+  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
+  const arrivalRemainSeat = useSelector(
+    state => state.ticket.seat.arrival.remain
+  );
 
-const BusSeat = () => {
+  const seat = arrivalRemainSeat === null ? startRemainSeat : arrivalRemainSeat;
+
+  useEffect(() => {
+    let seatNumber = [
+      { number: 1, remain: false },
+      { number: 2, remain: false },
+      { number: 3, remain: false },
+      { number: 4, remain: false },
+      { number: 5, remain: false },
+      { number: 6, remain: false },
+      { number: 7, remain: false },
+      { number: 8, remain: false },
+      { number: 9, remain: false },
+      { number: 10, remain: false },
+      { number: 11, remain: false },
+      { number: 12, remain: false },
+      { number: 13, remain: false },
+      { number: 14, remain: false },
+      { number: 15, remain: false },
+      { number: 16, remain: false },
+      { number: 17, remain: false },
+      { number: 18, remain: false },
+      { number: 19, remain: false },
+      { number: 20, remain: false },
+      { number: 21, remain: false },
+      { number: 22, remain: false },
+      { number: 23, remain: false },
+      { number: 24, remain: false },
+      { number: 25, remain: false },
+      { number: 26, remain: false },
+      { number: 27, remain: false },
+    ];
+
+    let randomNumberArr = [];
+    for (let i = 0; i < seat; i++) {
+      const randomNumber = Math.floor(Math.random() * 27 + 1);
+      if (randomNumberArr.indexOf(randomNumber) === -1) {
+        randomNumberArr.push(randomNumber);
+      } else {
+        i--;
+      }
+    }
+
+    const remainSeat = seatNumber.map(seat =>
+      randomNumberArr.some(num => num === seat.number)
+        ? { ...seat, remain: !seat.remain }
+        : seat
+    );
+
+    setRemainSeatArr(remainSeat);
+  }, [seat]);
+
   return (
     <BusSeatWrapper>
       <div>
@@ -40,8 +69,12 @@ const BusSeat = () => {
         <p>출입구</p>
       </div>
       <SeatNumberWrapper>
-        {seatNumber.map(seat => (
-          <BusSeatItem key={seat.number} num={seat.number} />
+        {remainSeatArr.map(seat => (
+          <BusSeatItem
+            key={seat.number}
+            num={seat.number}
+            remain={seat.remain}
+          />
         ))}
       </SeatNumberWrapper>
     </BusSeatWrapper>

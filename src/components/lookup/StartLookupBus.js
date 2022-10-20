@@ -64,7 +64,7 @@ const StartLookupBus = props => {
               seat={bus.seat}
             />
           ))}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <LoadingText>Loading...</LoadingText>}
       </ul>
     </Wrapper>
   );
@@ -76,6 +76,8 @@ const Wrapper = styled.div`
     overflow: scroll;
   }
 `;
+
+const LoadingText = styled.p``;
 
 const StartBusTime = styled.div`
   height: 80px;

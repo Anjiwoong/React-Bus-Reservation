@@ -1,8 +1,26 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled, { css } from 'styled-components';
+import { ticketActions } from '../../store/ticket-slice';
 
 const BusSeatItem = props => {
-  return <SeatNumber>{props.num}</SeatNumber>;
+  const [isSelected, setIsSelected] = useState(false);
+  const dispatch = useDispatch();
+
+  const selectedHandler = () => {
+    dispatch(ticketActions.setSelectedSeat(props.num));
+    setIsSelected(prev => !prev);
+  };
+
+  return (
+    <SeatNumber
+      remain={props.remain}
+      selected={isSelected}
+      onClick={selectedHandler}
+    >
+      {props.num}
+    </SeatNumber>
+  );
 };
 
 const SeatNumber = styled.li`
@@ -22,11 +40,28 @@ const SeatNumber = styled.li`
   }
 
   &:hover {
-    background: ${({ theme }) => theme.color.primaryColor};
-    color: ${({ theme }) => theme.color.white};
-    border: 1px solid ${({ theme }) => theme.color.white};
     cursor: pointer;
   }
+
+  ${props =>
+    !props.remain &&
+    css`
+      background: ${({ theme }) => theme.color.gray3};
+
+      &:hover {
+        cursor: not-allowed;
+        background: ${({ theme }) => theme.color.gray3};
+        color: ${({ theme }) => theme.color.black};
+      }
+    `}
+
+  ${props =>
+    props.selected &&
+    css`
+      background: ${({ theme }) => theme.color.primaryColor};
+      border: none;
+      color: ${({ theme }) => theme.color.white};
+    `}
 `;
 
 export default BusSeatItem;

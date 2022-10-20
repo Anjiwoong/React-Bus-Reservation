@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import { FaBus } from 'react-icons/fa';
 import AuthContext from '../../store/auth-context';
 import { Link, useNavigate } from 'react-router-dom';
+import { ticketActions } from '../../store/ticket-slice';
+import DateContext from '../../store/date-context';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+  const dateCtx = useContext(DateContext);
+  const dispatch = useDispatch();
 
   const isLoggedIn = authCtx.isLoggedIn;
 
@@ -15,12 +20,19 @@ const Header = () => {
     navigate('/login');
   };
 
+  const resetHandler = () => {
+    dispatch(ticketActions.reset());
+    dateCtx.resetHandler();
+  };
+
   return (
     <Wrapper>
       <Content>
         <Title>
           <FaBus />
-          <Link to={isLoggedIn ? '/' : '/login'}>시외버스 예약</Link>
+          <Link to={isLoggedIn ? '/' : '/login'} onClick={resetHandler}>
+            시외버스 예약
+          </Link>
         </Title>
         {isLoggedIn && <Button onClick={logoutHandler}>로그아웃</Button>}
       </Content>
