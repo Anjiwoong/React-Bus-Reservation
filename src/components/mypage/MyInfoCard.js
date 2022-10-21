@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import RouteWrapper from './RouteWrapper';
 import TimeWrapper from './TimeWrapper';
 
-const MyInfoCard = () => {
+const MyInfoCard = props => {
+  // console.log(props);
+
   return (
     <Wrapper>
       <TimeWrapper />

@@ -19,6 +19,7 @@ const initialState = {
       selected: [],
     },
   },
+  time: { start: '', arrival: '' },
   charge: 0,
   premium: false,
   allCheck: false,
@@ -37,11 +38,6 @@ const ticketSlice = createSlice({
     setArrivalLocation(state, action) {
       state.location.arrival = action.payload;
     },
-    switchLocation(state) {
-      let temp = state.location.start;
-      state.location.start = state.location.arrival;
-      state.location.arrival = temp;
-    },
     changeClass(state, action) {
       state.premium = action.payload;
     },
@@ -56,6 +52,12 @@ const ticketSlice = createSlice({
     },
     setArrivalRemainingSeat(state, action) {
       state.seat.arrival.remain = action.payload;
+    },
+    setStartTime(state, action) {
+      state.time.start = action.payload;
+    },
+    setArrivalTime(state, action) {
+      state.time.arrival = action.payload;
     },
     setSelectedSeat(state, action) {
       if (state.seat.arrival.remain === null) {
@@ -90,6 +92,8 @@ const ticketSlice = createSlice({
       state.seat.start.selected = [];
       state.seat.arrival.remain = null;
       state.seat.arrival.selected = [];
+      state.time.start = '';
+      state.time.arrival = '';
       state.charge = 0;
       state.premium = false;
       state.allCheck = false;
