@@ -7,16 +7,31 @@ const RouteInfo = () => {
   const start = useSelector(state => state.ticket.location.start.name);
   const arrival = useSelector(state => state.ticket.location.arrival.name);
 
+  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
+
+  const oneway = useSelector(state => state.ticket.oneway);
+
+  const startTerminalText = oneway
+    ? start
+    : startRemainSeat !== null && !oneway
+    ? arrival
+    : start;
+  const arrivalTerminalText = oneway
+    ? arrival
+    : startRemainSeat !== null && !oneway
+    ? start
+    : arrival;
+
   return (
     <Wrapper>
       <Start>
         <p>출발</p>
-        <span>{start}</span>
+        <span>{startTerminalText}</span>
       </Start>
       <CgArrowLongRightC />
       <Arrival>
         <p>도착</p>
-        <span>{arrival}</span>
+        <span>{arrivalTerminalText}</span>
       </Arrival>
     </Wrapper>
   );

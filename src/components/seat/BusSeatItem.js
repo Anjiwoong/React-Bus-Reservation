@@ -8,6 +8,8 @@ const BusSeatItem = props => {
   const dispatch = useDispatch();
 
   const selectedHandler = () => {
+    if (!props.remain) return;
+
     dispatch(ticketActions.setSelectedSeat(props.num));
     setIsSelected(prev => !prev);
   };

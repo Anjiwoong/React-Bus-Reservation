@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import Button from '../UI/Button';
-import { MdChangeCircle } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { ticketActions } from '../../store/ticket-slice';
+import { VscArrowRight, VscArrowSwap } from 'react-icons/vsc';
+import { useSelector } from 'react-redux';
 import { useContext } from 'react';
 import DateContext from '../../store/date-context';
 
@@ -13,8 +12,6 @@ const TerminalButtons = props => {
   );
   const oneway = useSelector(state => state.ticket.oneway);
   const dateCtx = useContext(DateContext);
-
-  const dispatch = useDispatch();
 
   const startHandler = () => {
     if (oneway && dateCtx.date.start === '') {
@@ -41,7 +38,7 @@ const TerminalButtons = props => {
     props.onShow();
   };
 
-  const switchLocationHandler = () => dispatch(ticketActions.switchLocation());
+  const arrowIcon = oneway ? <VscArrowRight /> : <VscArrowSwap />;
 
   return (
     <Wrapper>
@@ -51,9 +48,7 @@ const TerminalButtons = props => {
           <span>{startTerminal}</span>
         </SelectButton>
       </div>
-      <span>
-        <MdChangeCircle onClick={switchLocationHandler} />
-      </span>
+      <span>{arrowIcon}</span>
       <div>
         <SelectButton onClick={arrivalHandler}>
           <p>도착</p>
@@ -83,7 +78,8 @@ const Wrapper = styled.div`
   }
 
   svg {
-    font-size: 60px;
+    font-size: 50px;
+    cursor: default;
   }
 `;
 

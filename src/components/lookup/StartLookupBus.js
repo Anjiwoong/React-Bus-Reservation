@@ -19,9 +19,18 @@ const StartLookupBus = props => {
     state => state.ticket.location.arrival.name
   );
 
+  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
+  const oneway = useSelector(state => state.ticket.oneway);
+
   const { isLoading, sendRequest } = useHttp();
 
-  const { start } = dateCtx.date;
+  const { start, arrival } = dateCtx.date;
+
+  const startDateText = oneway
+    ? start
+    : startRemainSeat !== null && !oneway
+    ? arrival
+    : start;
 
   useEffect(() => {
     const transformStartTime = time => {
@@ -46,8 +55,10 @@ const StartLookupBus = props => {
   return (
     <Wrapper>
       <StartBusTime>
-        <span>가는 날 배차 조회</span>
-        <span>{dateCtx.date.start}</span>
+        <span>
+          {startRemainSeat !== null && !oneway ? '오는' : '가는'}날 배차 조회
+        </span>
+        <span>{startDateText}</span>
       </StartBusTime>
       <StartBusItem>
         <span>출발</span>
