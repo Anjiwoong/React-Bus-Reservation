@@ -6,10 +6,11 @@ import Signup from './pages/Signup';
 import Mypage from './pages/Mypage';
 import Lookup from './pages/Lookup';
 import Seat from './pages/Seat';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from './store/auth-context';
 import ErrorPage from './pages/ErrorPage';
 import { useSelector } from 'react-redux';
+import { firestore } from './firebase/firebaseInit';
 
 const App = () => {
   const authCtx = useContext(AuthContext);

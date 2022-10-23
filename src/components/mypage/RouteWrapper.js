@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import PriceInfo from './PriceInfo';
 import RouteInfo from './RouteInfo';
 
-const RouteWrapper = () => {
+const RouteWrapper = props => {
   return (
     <Wrapper>
-      <RouteInfo />
-      <PriceInfo />
+      <RouteInfo start={props.start} arrival={props.arrival} />
+      <PriceInfo count={props.count} total={props.total} />
     </Wrapper>
   );
 };

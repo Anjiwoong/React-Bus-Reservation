@@ -1,11 +1,16 @@
 import React from 'react';
 import { BiChevronRight } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../UI/Button';
 
 const ConfirmButton = () => {
+  const navigate = useNavigate();
+
+  const confirmHandler = () => navigate('/mypage');
+
   return (
-    <Wrapper size="36px">
+    <Wrapper size="36px" onClick={confirmHandler}>
       <span>예매 확인 및 취소</span>
       <BiChevronRight />
     </Wrapper>

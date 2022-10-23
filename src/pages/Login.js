@@ -16,7 +16,7 @@ const Login = () => {
   const { isLoading, error, sendRequest } = useHttp();
 
   const fetchUser = data => {
-    authCtx.login(data.idToken);
+    authCtx.login(data.email);
     navigate('/');
   };
 
