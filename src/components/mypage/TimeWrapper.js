@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../UI/Button';
 
-const TimeWrapper = () => {
+const TimeWrapper = props => {
   return (
     <Wrapper>
       <div>

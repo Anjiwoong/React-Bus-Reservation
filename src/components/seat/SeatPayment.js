@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import DateContext from '../../store/date-context';
 import { ticketActions } from '../../store/ticket-slice';
+import useHttp from '../../hooks/use-http';
 
 import OnewayPayment from './payment/OnewayPayment';
 import RoundTripPayment from './payment/RoundTripPayment';
@@ -16,6 +17,16 @@ const SeatPayment = () => {
     state => state.ticket.seat.start.selected
   );
   const oneway = useSelector(state => state.ticket.oneway);
+  const isPremium = useSelector(state => state.ticket.premium);
+  const startTicket = useSelector(state => state.ticket.seat.start.selected);
+  const arrivalTicket = useSelector(state => state.ticket.seat.arrival);
+  const totalCharge = useSelector(state => state.ticket.charge);
+
+  const startTerminal = useSelector(state => state.ticket.location.start.name);
+  const arrivalTerminal = useSelector(
+    state => state.ticket.location.arrival.name
+  );
+  const startTime = useSelector(state => state.ticket.time.start);
 
   const selectArrivalSeatArr = useSelector(
     state => state.ticket.seat.arrival.selected
@@ -36,10 +47,43 @@ const SeatPayment = () => {
     navigate('/mypage');
   };
 
+  const onewayTicket = {
+    id: localStorage.getItem('token'),
+    ticket: [
+      {
+        uniqKey: Math.random().toString(),
+        start: startTerminal,
+        arrival: arrivalTerminal,
+        date: dateCtx.date.start,
+        time: startTime,
+        premium: isPremium,
+        person: startTicket.length,
+        charge: totalCharge * startTicket.length,
+      },
+    ],
+  };
+
+  // const roundTripTicket
+
+  const { isLoading, sendRequest, error } = useHttp();
+
+  const createTicket = () => {
+    done();
+  };
+
   const confirmHandler = () => {
     // firebase요청
+
     if (arrivalRemainSeat === null && oneway) {
-      done();
+      sendRequest(
+        {
+          url: 'https://tmoney-bus-default-rtdb.firebaseio.com/ticket.json',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: onewayTicket,
+        },
+        createTicket
+      );
     } else if (arrivalRemainSeat !== null && !oneway) {
       done();
     } else {

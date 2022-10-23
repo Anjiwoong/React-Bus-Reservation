@@ -51,8 +51,10 @@ const SelectSeatItem = props => {
   const selectSeatHandler = () => {
     if (startRemainSeat === null) {
       dispatch(ticketActions.setStartRemainingSeat(seat));
+      dispatch(ticketActions.setStartTime(formattedStartTime));
     } else {
       dispatch(ticketActions.setArrivalRemainingSeat(seat));
+      dispatch(ticketActions.setArrivalTime(formattedStartTime));
     }
 
     navigate('seat');
