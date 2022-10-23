@@ -3,13 +3,23 @@ import styled from 'styled-components';
 import RouteWrapper from './RouteWrapper';
 import TimeWrapper from './TimeWrapper';
 
-const MyInfoCard = props => {
-  // console.log(props);
-
+const MyInfoCard = ({ ticket, onRemove }) => {
+  console.log(ticket);
   return (
     <Wrapper>
-      <TimeWrapper />
-      <RouteWrapper />
+      <TimeWrapper
+        date={ticket.date}
+        time={ticket.time}
+        premium={ticket.premium}
+        id={ticket.id}
+        onRemove={onRemove}
+      />
+      <RouteWrapper
+        start={ticket.start}
+        arrival={ticket.arrival}
+        count={ticket.count}
+        total={ticket.total}
+      />
     </Wrapper>
   );
 };

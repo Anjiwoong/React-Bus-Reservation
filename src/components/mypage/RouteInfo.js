@@ -1,37 +1,18 @@
 import React from 'react';
 import { CgArrowLongRightC } from 'react-icons/cg';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-const RouteInfo = () => {
-  const start = useSelector(state => state.ticket.location.start.name);
-  const arrival = useSelector(state => state.ticket.location.arrival.name);
-
-  const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
-
-  const oneway = useSelector(state => state.ticket.oneway);
-
-  const startTerminalText = oneway
-    ? start
-    : startRemainSeat !== null && !oneway
-    ? arrival
-    : start;
-  const arrivalTerminalText = oneway
-    ? arrival
-    : startRemainSeat !== null && !oneway
-    ? start
-    : arrival;
-
+const RouteInfo = props => {
   return (
     <Wrapper>
       <Start>
         <p>출발</p>
-        <span>{startTerminalText}</span>
+        <span>{props.start}</span>
       </Start>
       <CgArrowLongRightC />
       <Arrival>
         <p>도착</p>
-        <span>{arrivalTerminalText}</span>
+        <span>{props.arrival}</span>
       </Arrival>
     </Wrapper>
   );

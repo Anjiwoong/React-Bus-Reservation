@@ -3,14 +3,18 @@ import styled from 'styled-components';
 import Button from '../UI/Button';
 
 const TimeWrapper = props => {
+  const deleteHandler = () => {
+    props.onRemove(props.id);
+  };
+
   return (
     <Wrapper>
       <div>
-        <span>2022-10-10</span>
-        <span>08:40</span>
-        <span>일반</span>
+        <span>{props.date}</span>
+        <span>{props.time}</span>
+        <span>{props.premium ? '우등' : '일반'}</span>
       </div>
-      <CancelButton>예매취소</CancelButton>
+      <CancelButton onClick={deleteHandler}>예매취소</CancelButton>
     </Wrapper>
   );
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const PriceInfo = () => {
+const PriceInfo = props => {
   return (
     <PriceWrap>
       <Adult>
-        성인 <span>1</span>명
+        성인 <span>{props.count}</span>명
       </Adult>
-      <Price>7,800원</Price>
+      <Price>{props.total.toLocaleString()}원</Price>
     </PriceWrap>
   );
 };

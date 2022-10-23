@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
-import DateContext from '../../store/date-context';
 import { ticketActions } from '../../store/ticket-slice';
-import useHttp from '../../hooks/use-http';
+import DateContext from '../../store/date-context';
+import AuthContext from '../../store/auth-context';
+
+import styled, { css } from 'styled-components';
+
+import { firestore, db } from '../../firebase/firebaseInit';
+// import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import OnewayPayment from './payment/OnewayPayment';
 import RoundTripPayment from './payment/RoundTripPayment';
@@ -13,20 +17,27 @@ const SeatPayment = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const dateCtx = useContext(DateContext);
+  const authCtx = useContext(AuthContext);
+
   const selectStartSeatArr = useSelector(
     state => state.ticket.seat.start.selected
   );
   const oneway = useSelector(state => state.ticket.oneway);
-  const isPremium = useSelector(state => state.ticket.premium);
-  const startTicket = useSelector(state => state.ticket.seat.start.selected);
-  const arrivalTicket = useSelector(state => state.ticket.seat.arrival);
-  const totalCharge = useSelector(state => state.ticket.charge);
 
   const startTerminal = useSelector(state => state.ticket.location.start.name);
   const arrivalTerminal = useSelector(
     state => state.ticket.location.arrival.name
   );
-  const startTime = useSelector(state => state.ticket.time.start);
+  const { selected: startSelected } = useSelector(
+    state => state.ticket.seat.start
+  );
+  const { selected: arrivalSelected } = useSelector(
+    state => state.ticket.seat.arrival
+  );
+  const { premium, charge } = useSelector(state => state.ticket);
+  const { start: startTime, arrival: arrivalTime } = useSelector(
+    state => state.ticket.time
+  );
 
   const selectArrivalSeatArr = useSelector(
     state => state.ticket.seat.arrival.selected
@@ -47,44 +58,41 @@ const SeatPayment = () => {
     navigate('/mypage');
   };
 
+  const uniqId1 = Math.random().toString(36).substring(2, 12);
+  const uniqId2 = Math.random().toString(36).substring(2, 12);
+
   const onewayTicket = {
-    id: localStorage.getItem('token'),
-    ticket: [
-      {
-        uniqKey: Math.random().toString(),
-        start: startTerminal,
-        arrival: arrivalTerminal,
-        date: dateCtx.date.start,
-        time: startTime,
-        premium: isPremium,
-        person: startTicket.length,
-        charge: totalCharge * startTicket.length,
-      },
-    ],
+    id: uniqId1,
+    date: dateCtx.date.start,
+    time: startTime,
+    premium,
+    count: startSelected.length,
+    total: charge * startSelected.length,
+    start: startTerminal,
+    arrival: arrivalTerminal,
   };
 
-  // const roundTripTicket
-
-  const { isLoading, sendRequest, error } = useHttp();
-
-  const createTicket = () => {
-    done();
+  const roundTripTicket = {
+    id: uniqId2,
+    date: dateCtx.date.arrival,
+    time: arrivalTime,
+    premium,
+    count: arrivalSelected.length,
+    total: charge * arrivalSelected.length,
+    start: arrivalTerminal,
+    arrival: startTerminal,
   };
 
   const confirmHandler = () => {
     // firebase요청
-
     if (arrivalRemainSeat === null && oneway) {
-      sendRequest(
-        {
-          url: 'https://tmoney-bus-default-rtdb.firebaseio.com/ticket.json',
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: onewayTicket,
-        },
-        createTicket
-      );
+      firestore.collection(authCtx.token).doc(uniqId1).set(onewayTicket);
+
+      done();
     } else if (arrivalRemainSeat !== null && !oneway) {
+      firestore.collection(authCtx.token).doc(uniqId1).set(onewayTicket);
+      firestore.collection(authCtx.token).doc(uniqId2).set(roundTripTicket);
+
       done();
     } else {
       navigate('/home/lookup');
