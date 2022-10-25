@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Card from '../components/UI/Card';
 import Heading from '../components/UI/Heading';
-import Layer from '../components/UI/Layer';
 import TicketButtons from '../components/home/TicketButtons';
 import TerminalButtons from '../components/home/TerminalButtons';
 import CheckButtons from '../components/home/CheckButtons';
@@ -18,18 +17,16 @@ const Home = () => {
 
   return (
     <>
-      <Layer>
-        <Heading>예매하기</Heading>
-        {showModal && <SearchModal onClose={closeModalHandler} />}
-        <Card>
-          <TicketButtons />
-          <DateSelectors />
-          <TerminalButtons onShow={showModalHandler} />
-          <CheckButtons />
-        </Card>
-        <LookupButton />
-        <ConfirmButton />
-      </Layer>
+      <Heading>예매하기</Heading>
+      {showModal && <SearchModal onClose={closeModalHandler} />}
+      <Card>
+        <TicketButtons />
+        <DateSelectors />
+        <TerminalButtons onShow={showModalHandler} />
+        <CheckButtons />
+      </Card>
+      <LookupButton />
+      <ConfirmButton />
     </>
   );
 };

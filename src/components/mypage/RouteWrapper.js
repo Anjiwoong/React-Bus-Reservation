@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PriceInfo from './PriceInfo';
-import RouteInfo from './RouteInfo';
+import RouteInfo from '../UI/RouteInfo';
 
 const RouteWrapper = props => {
   return (

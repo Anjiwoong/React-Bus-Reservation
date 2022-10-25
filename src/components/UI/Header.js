@@ -1,17 +1,18 @@
 import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaBus } from 'react-icons/fa';
 import AuthContext from '../../store/auth-context';
-import { Link, useNavigate } from 'react-router-dom';
-import { ticketActions } from '../../store/ticket-slice';
 import DateContext from '../../store/date-context';
-import { useDispatch } from 'react-redux';
+import { ticketActions } from '../../store/ticket-slice';
 
 const Header = () => {
-  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const dateCtx = useContext(DateContext);
   const dispatch = useDispatch();
+
+  const authCtx = useContext(AuthContext);
+  const dateCtx = useContext(DateContext);
 
   const isLoggedIn = authCtx.isLoggedIn;
 

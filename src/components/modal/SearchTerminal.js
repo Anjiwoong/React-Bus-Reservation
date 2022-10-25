@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { BiSearch } from 'react-icons/bi';
 import styled, { css } from 'styled-components';
-import useHttp from '../../hooks/use-http';
+import { BiSearch } from 'react-icons/bi';
 import Button from '../UI/Button';
 import Input from '../UI/Input';
+import useHttp from '../../hooks/use-http';
 import TerminalItem from './TerminalItem';
-import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import DateContext from '../../store/date-context';
+import _ from 'lodash';
 
 const API_KEY =
   '1Yt0hh%2F7Sy9VyVvzkqkvQGF68NQ%2BS1UnWTR7%2FL4%2FUsSCS62pr6HZBSaAHRRHhi8gwDmUHChWRPeJZFSAZ4LXeg%3D%3D';
@@ -18,11 +18,12 @@ const SearchTerminal = ({ region, onClose }) => {
   const [enteredValue, setEnteredValue] = useState('');
 
   const startTerminalCode = useSelector(
-    state => state.ticket.location.start.terminalCode
+    state => state.ticket.terminal.start.terminalCode
   );
-  const { isLoading, sendRequest } = useHttp();
-  const dateCtx = useContext(DateContext);
 
+  const { isLoading, sendRequest, error } = useHttp();
+
+  const dateCtx = useContext(DateContext);
   const { start } = dateCtx.date;
   const { startTerminal } = dateCtx;
 
@@ -56,6 +57,10 @@ const SearchTerminal = ({ region, onClose }) => {
     );
   }, [sendRequest, region, startTerminalCode, start, startTerminal]);
 
+  const submitHandler = e => {
+    e.preventDefault();
+  };
+
   const throttleHandler = useMemo(
     () => _.throttle(terminal => setTerminals(terminal), 500),
     []
@@ -74,7 +79,7 @@ const SearchTerminal = ({ region, onClose }) => {
 
   return (
     <RightDiv arrival={!dateCtx.startTerminal}>
-      <SearchForm>
+      <SearchForm onSubmit={submitHandler}>
         <Input
           modal
           placeholder="터미널 검색"
@@ -99,6 +104,7 @@ const SearchTerminal = ({ region, onClose }) => {
           <LoadingMessage>일치하는 정보가 없습니다.</LoadingMessage>
         )}
         {isLoading && <LoadingMessage>Loading...</LoadingMessage>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </ul>
     </RightDiv>
   );
@@ -146,6 +152,13 @@ const SearchForm = styled.form`
 `;
 
 const LoadingMessage = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const ErrorMessage = styled.p`
   position: absolute;
   top: 50%;
   left: 50%;

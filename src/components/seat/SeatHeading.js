@@ -13,15 +13,15 @@ const SeatHeading = () => {
       <p>좌석 선택</p>
       <div>
         <p>
-          전체 <AllSeat>27</AllSeat>석
+          전체 <BoldText>27</BoldText>석
         </p>
         <p>
           잔여
-          <LeftSeat>
+          <BoldText>
             {arrivalRemainSeat === null
               ? ' ' + startRemainSeat
               : ' ' + arrivalRemainSeat}
-          </LeftSeat>
+          </BoldText>
           석
         </p>
       </div>
@@ -69,11 +69,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const AllSeat = styled.span`
-  font-size: ${({ theme }) => theme.size.medium2};
-`;
-
-const LeftSeat = styled.span`
+const BoldText = styled.span`
   font-size: ${({ theme }) => theme.size.medium2};
 `;
 

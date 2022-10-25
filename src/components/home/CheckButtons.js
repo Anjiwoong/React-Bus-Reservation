@@ -2,42 +2,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ticketActions } from '../../store/ticket-slice';
 
 import styled from 'styled-components';
+import CheckButtonItem from './CheckButtonItem';
 
 const CheckButtons = () => {
   const dispatch = useDispatch();
 
   const normalSeatHandler = () => dispatch(ticketActions.changeClass(false));
   const premiumSeatHandler = () => dispatch(ticketActions.changeClass(true));
+
   const premium = useSelector(state => state.ticket.premium);
 
   return (
     <Wrapper>
-      <div>
-        <input
-          type="radio"
-          id="normal"
-          name="busType"
-          checked={!premium}
-          readOnly
-        />
-        <label htmlFor="normal" onClick={normalSeatHandler}>
-          <CheckIcon></CheckIcon>
-          <span>일반</span>
-        </label>
-      </div>
-      <div>
-        <input
-          type="radio"
-          id="premium"
-          name="busType"
-          checked={premium}
-          readOnly
-        />
-        <label htmlFor="premium" onClick={premiumSeatHandler}>
-          <CheckIcon></CheckIcon>
-          <span>우등</span>
-        </label>
-      </div>
+      <CheckButtonItem
+        premium={premium}
+        changeClass={normalSeatHandler}
+        class="일반"
+      />
+      <CheckButtonItem
+        premium={premium}
+        changeClass={premiumSeatHandler}
+        class="우등"
+      />
     </Wrapper>
   );
 };
@@ -64,28 +50,6 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
-  }
-`;
-
-const CheckIcon = styled.span`
-  display: block;
-  width: 24px;
-  height: 24px;
-  background: ${({ theme }) => theme.color.gray3};
-  border-radius: 50%;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    width: 8px;
-    height: 4px;
-    transform: rotate(-45deg);
-    border-style: solid;
-    border-color: ${({ theme }) => theme.color.white};
-    border-width: 0px 0px 3px 3px;
   }
 `;
 

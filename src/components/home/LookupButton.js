@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { BiChevronRight } from 'react-icons/bi';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import DateContext from '../../store/date-context';
-import { ticketActions } from '../../store/ticket-slice';
 import Button from '../UI/Button';
+import { BiChevronRight } from 'react-icons/bi';
+import DateContext from '../../store/date-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { ticketActions } from '../../store/ticket-slice';
 
 const LookupButton = () => {
   const navigate = useNavigate();
@@ -14,12 +14,12 @@ const LookupButton = () => {
 
   const { oneway } = useSelector(state => state.ticket);
 
-  const { name: locationStart } = useSelector(
-    state => state.ticket.location.start
+  const { name: startTerminal } = useSelector(
+    state => state.ticket.terminal.start
   );
 
-  const { name: locationArrival } = useSelector(
-    state => state.ticket.location.arrival
+  const { name: arrivalTerminal } = useSelector(
+    state => state.ticket.terminal.arrival
   );
 
   const { allCheck } = useSelector(state => state.ticket);
@@ -31,25 +31,25 @@ const LookupButton = () => {
 
     if (oneway) {
       allCheck =
-        start !== '' && locationStart !== '선택' && locationArrival !== '선택';
+        start !== '' && startTerminal !== '선택' && arrivalTerminal !== '선택';
     } else {
       allCheck =
         start !== '' &&
         arrival !== '' &&
-        locationStart !== '선택' &&
-        locationArrival !== '선택';
+        startTerminal !== '선택' &&
+        arrivalTerminal !== '선택';
     }
 
     dispatch(ticketActions.setAllCheck(allCheck));
-  }, [start, arrival, dispatch, locationArrival, locationStart, oneway]);
+  }, [start, arrival, dispatch, arrivalTerminal, startTerminal, oneway]);
 
   const navigateHandler = () => {
-    if (locationStart === '선택' && locationArrival === '선택') {
+    if (startTerminal === '선택' && arrivalTerminal === '선택') {
       alert('출발지와 도착지를 선택해주세요.');
       return;
     }
 
-    if (locationStart === locationArrival) {
+    if (startTerminal === arrivalTerminal) {
       alert('출발지와 도착지는 같을 수 없습니다.');
       return;
     }

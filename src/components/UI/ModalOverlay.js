@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
+import { MdClose } from 'react-icons/md';
 import SelectRegion from '../modal/SelectRegion';
 import SearchTerminal from '../modal/SearchTerminal';
 import DateContext from '../../store/date-context';
