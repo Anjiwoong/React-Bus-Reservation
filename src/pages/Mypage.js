@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 const Mypage = () => {
   const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const { token } = useContext(AuthContext);
   const removeHandler = id => {
@@ -16,8 +17,9 @@ const Mypage = () => {
     firestore.collection(token).doc(id).delete();
   };
 
-  const getTickets = useCallback(() => {
-    firestore
+  const getTickets = useCallback(async () => {
+    setLoading(true);
+    await firestore
       .collection(token)
       .get()
       .then(ticket => {
@@ -25,6 +27,7 @@ const Mypage = () => {
           setTickets(prev => [...prev, item.data()]);
         });
       });
+    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -39,9 +42,11 @@ const Mypage = () => {
       {tickets.map(ticket => (
         <MyInfoCard key={ticket.id} ticket={ticket} onRemove={removeHandler} />
       ))}
-      {tickets.length === 0 && (
+
+      {!loading && tickets.length === 0 && (
         <EmptyMessage>예약 내역이 없습니다.</EmptyMessage>
       )}
+      {loading && <EmptyMessage>Loading...</EmptyMessage>}
     </>
   );
 };
