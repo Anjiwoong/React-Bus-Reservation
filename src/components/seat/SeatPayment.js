@@ -1,17 +1,14 @@
 import React, { useContext } from 'react';
+import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ticketActions } from '../../store/ticket-slice';
 import DateContext from '../../store/date-context';
 import AuthContext from '../../store/auth-context';
 
-import styled, { css } from 'styled-components';
-
-import { firestore, db } from '../../firebase/firebaseInit';
-// import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-
 import OnewayPayment from './payment/OnewayPayment';
 import RoundTripPayment from './payment/RoundTripPayment';
+import { firestore } from '../../firebase/firebaseInit';
 
 const SeatPayment = () => {
   const navigate = useNavigate();
@@ -19,14 +16,11 @@ const SeatPayment = () => {
   const dateCtx = useContext(DateContext);
   const authCtx = useContext(AuthContext);
 
-  const selectStartSeatArr = useSelector(
-    state => state.ticket.seat.start.selected
-  );
   const oneway = useSelector(state => state.ticket.oneway);
 
-  const startTerminal = useSelector(state => state.ticket.location.start.name);
+  const startTerminal = useSelector(state => state.ticket.terminal.start.name);
   const arrivalTerminal = useSelector(
-    state => state.ticket.location.arrival.name
+    state => state.ticket.terminal.arrival.name
   );
   const { selected: startSelected } = useSelector(
     state => state.ticket.seat.start
@@ -39,18 +33,14 @@ const SeatPayment = () => {
     state => state.ticket.time
   );
 
-  const selectArrivalSeatArr = useSelector(
-    state => state.ticket.seat.arrival.selected
-  );
-
   const arrivalRemainSeat = useSelector(
     state => state.ticket.seat.arrival.remain
   );
 
   const isActive =
     arrivalRemainSeat === null
-      ? selectStartSeatArr.length > 0
-      : selectArrivalSeatArr.length > 0;
+      ? startSelected.length > 0
+      : arrivalSelected.length > 0;
 
   const done = () => {
     dispatch(ticketActions.reset());
@@ -84,7 +74,6 @@ const SeatPayment = () => {
   };
 
   const confirmHandler = () => {
-    // firebase요청
     if (arrivalRemainSeat === null && oneway) {
       firestore.collection(authCtx.token).doc(uniqId1).set(onewayTicket);
 

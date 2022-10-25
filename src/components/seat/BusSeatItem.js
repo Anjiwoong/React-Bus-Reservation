@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { ticketActions } from '../../store/ticket-slice';
 
 const BusSeatItem = props => {

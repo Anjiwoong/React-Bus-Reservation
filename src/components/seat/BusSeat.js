@@ -3,7 +3,37 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BusSeatItem from './BusSeatItem';
 
-const BusSeat = props => {
+const seatNumber = [
+  { number: 1, remain: false },
+  { number: 2, remain: false },
+  { number: 3, remain: false },
+  { number: 4, remain: false },
+  { number: 5, remain: false },
+  { number: 6, remain: false },
+  { number: 7, remain: false },
+  { number: 8, remain: false },
+  { number: 9, remain: false },
+  { number: 10, remain: false },
+  { number: 11, remain: false },
+  { number: 12, remain: false },
+  { number: 13, remain: false },
+  { number: 14, remain: false },
+  { number: 15, remain: false },
+  { number: 16, remain: false },
+  { number: 17, remain: false },
+  { number: 18, remain: false },
+  { number: 19, remain: false },
+  { number: 20, remain: false },
+  { number: 21, remain: false },
+  { number: 22, remain: false },
+  { number: 23, remain: false },
+  { number: 24, remain: false },
+  { number: 25, remain: false },
+  { number: 26, remain: false },
+  { number: 27, remain: false },
+];
+
+const BusSeat = () => {
   const [remainSeatArr, setRemainSeatArr] = useState([]);
   const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
   const arrivalRemainSeat = useSelector(
@@ -13,37 +43,7 @@ const BusSeat = props => {
   const seat = arrivalRemainSeat === null ? startRemainSeat : arrivalRemainSeat;
 
   useEffect(() => {
-    let seatNumber = [
-      { number: 1, remain: false },
-      { number: 2, remain: false },
-      { number: 3, remain: false },
-      { number: 4, remain: false },
-      { number: 5, remain: false },
-      { number: 6, remain: false },
-      { number: 7, remain: false },
-      { number: 8, remain: false },
-      { number: 9, remain: false },
-      { number: 10, remain: false },
-      { number: 11, remain: false },
-      { number: 12, remain: false },
-      { number: 13, remain: false },
-      { number: 14, remain: false },
-      { number: 15, remain: false },
-      { number: 16, remain: false },
-      { number: 17, remain: false },
-      { number: 18, remain: false },
-      { number: 19, remain: false },
-      { number: 20, remain: false },
-      { number: 21, remain: false },
-      { number: 22, remain: false },
-      { number: 23, remain: false },
-      { number: 24, remain: false },
-      { number: 25, remain: false },
-      { number: 26, remain: false },
-      { number: 27, remain: false },
-    ];
-
-    let randomNumberArr = [];
+    const randomNumberArr = [];
     for (let i = 0; i < seat; i++) {
       const randomNumber = Math.floor(Math.random() * 27 + 1);
       if (randomNumberArr.indexOf(randomNumber) === -1) {

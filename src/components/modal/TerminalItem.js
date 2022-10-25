@@ -11,14 +11,14 @@ const TerminalItem = ({ terminal, onClose }) => {
   const selectedTerminal = () => {
     if (dateCtx.startTerminal) {
       dispatch(
-        ticketActions.setStartLocation({
+        ticketActions.setStartTerminal({
           name: terminalNm,
           terminalCode: terminalId,
         })
       );
     } else {
       dispatch(
-        ticketActions.setArrivalLocation({
+        ticketActions.setArrivalTerminal({
           name: arrPlaceNm,
         })
       );

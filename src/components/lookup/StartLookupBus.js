@@ -8,15 +8,15 @@ import SelectSeatItem from './SelectSeatItem';
 const API_KEY =
   '1Yt0hh%2F7Sy9VyVvzkqkvQGF68NQ%2BS1UnWTR7%2FL4%2FUsSCS62pr6HZBSaAHRRHhi8gwDmUHChWRPeJZFSAZ4LXeg%3D%3D';
 
-const StartLookupBus = props => {
+const StartLookupBus = () => {
   const [terminals, setTerminals] = useState([]);
 
   const dateCtx = useContext(DateContext);
   const startTerminalCode = useSelector(
-    state => state.ticket.location.start.terminalCode
+    state => state.ticket.terminal.start.terminalCode
   );
   const arrivalTerminal = useSelector(
-    state => state.ticket.location.arrival.name
+    state => state.ticket.terminal.arrival.name
   );
 
   const startRemainSeat = useSelector(state => state.ticket.seat.start.remain);
@@ -36,6 +36,7 @@ const StartLookupBus = props => {
     const transformStartTime = time => {
       let loadedStartTime = [];
       const data = time.response.body;
+
       loadedStartTime = data.items.item.filter(
         terminal => terminal.arrPlaceNm === arrivalTerminal
       );
@@ -85,10 +86,16 @@ const Wrapper = styled.div`
   ul {
     height: 600px;
     overflow: scroll;
+    position: relative;
   }
 `;
 
-const LoadingText = styled.p``;
+const LoadingText = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const StartBusTime = styled.div`
   height: 80px;

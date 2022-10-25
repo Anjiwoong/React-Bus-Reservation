@@ -1,10 +1,9 @@
+import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ticketActions } from '../../store/ticket-slice';
-
 import styled, { css } from 'styled-components';
 import Button from '../UI/Button';
-import { useContext } from 'react';
 import DateContext from '../../store/date-context';
+import { ticketActions } from '../../store/ticket-slice';
 
 const TicketButtons = () => {
   const dispatch = useDispatch();
@@ -58,6 +57,7 @@ const TicketButton = styled(Button)`
     props.toggle ? props.theme.color.primaryColor : props.theme.color.gray2};
   cursor: pointer;
   position: relative;
+
   ${props =>
     props.toggle &&
     css`

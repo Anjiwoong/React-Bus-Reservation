@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   oneway: true,
-  location: {
+  terminal: {
     start: {
       name: '선택',
       terminalCode: '',
@@ -32,11 +32,11 @@ const ticketSlice = createSlice({
     changeWay(state, action) {
       state.oneway = action.payload;
     },
-    setStartLocation(state, action) {
-      state.location.start = action.payload;
+    setStartTerminal(state, action) {
+      state.terminal.start = action.payload;
     },
-    setArrivalLocation(state, action) {
-      state.location.arrival = action.payload;
+    setArrivalTerminal(state, action) {
+      state.terminal.arrival = action.payload;
     },
     changeClass(state, action) {
       state.premium = action.payload;
@@ -79,15 +79,15 @@ const ticketSlice = createSlice({
       }
     },
     resetWay(state) {
-      state.location.start.name = '선택';
-      state.location.start.terminalCode = '';
-      state.location.arrival.name = '선택';
+      state.terminal.start.name = '선택';
+      state.terminal.start.terminalCode = '';
+      state.terminal.arrival.name = '선택';
     },
     reset(state) {
       state.oneway = true;
-      state.location.start.name = '선택';
-      state.location.start.terminalCode = '';
-      state.location.arrival.name = '선택';
+      state.terminal.start.name = '선택';
+      state.terminal.start.terminalCode = '';
+      state.terminal.arrival.name = '선택';
       state.seat.start.remain = null;
       state.seat.start.selected = [];
       state.seat.arrival.remain = null;

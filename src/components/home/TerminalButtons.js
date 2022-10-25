@@ -6,9 +6,9 @@ import { useContext } from 'react';
 import DateContext from '../../store/date-context';
 
 const TerminalButtons = props => {
-  const startTerminal = useSelector(state => state.ticket.location.start.name);
+  const startTerminal = useSelector(state => state.ticket.terminal.start.name);
   const arrivalTerminal = useSelector(
-    state => state.ticket.location.arrival.name
+    state => state.ticket.terminal.arrival.name
   );
   const oneway = useSelector(state => state.ticket.oneway);
   const dateCtx = useContext(DateContext);

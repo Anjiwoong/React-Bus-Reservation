@@ -7,10 +7,8 @@ import DateContext from '../../store/date-context';
 const DateSelectors = () => {
   const oneway = useSelector(state => state.ticket.oneway);
   const dateCtx = useContext(DateContext);
-  const today = new Date().toISOString().slice(0, 10);
 
   const changeStartDateHandler = e => dateCtx.setStartDate(e.target.value);
-
   const changeArrivalDateHandler = e => dateCtx.setArrivalDate(e.target.value);
 
   return (
@@ -20,7 +18,6 @@ const DateSelectors = () => {
         data-placeholder="가는날"
         required
         aria-required="true"
-        // min={today}
         onChange={changeStartDateHandler}
         value={dateCtx.date.start}
       />

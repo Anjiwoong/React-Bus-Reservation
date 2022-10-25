@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import Button from '../../UI/Button';
 
 const RoundTripPayment = props => {
-  const isPremium = useSelector(state => state.ticket.premium);
+  const premium = useSelector(state => state.ticket.premium);
   const selectStartSeatArr = useSelector(
     state => state.ticket.seat.start.selected
   );
@@ -18,19 +18,19 @@ const RoundTripPayment = props => {
     state => state.ticket.seat.arrival.selected
   );
 
-  const startTerminal = useSelector(state => state.ticket.location.start.name);
+  const startTerminal = useSelector(state => state.ticket.terminal.start.name);
   const arrivalTerminal = useSelector(
-    state => state.ticket.location.arrival.name
+    state => state.ticket.terminal.arrival.name
   );
 
   const charge = useSelector(state => state.ticket.charge);
 
   const PREMIUM_CHARGE = 3000;
 
-  const startPayment = !isPremium
+  const startPayment = !premium
     ? charge * selectStartSeatArr.length
     : (charge + PREMIUM_CHARGE) * selectStartSeatArr.length;
-  const arrivalPayment = !isPremium
+  const arrivalPayment = !premium
     ? charge * selectArrivalSeatArr.length
     : (charge + PREMIUM_CHARGE) * selectArrivalSeatArr.length;
   const totalPayment = startPayment + arrivalPayment;
