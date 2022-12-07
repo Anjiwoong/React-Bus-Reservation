@@ -4,7 +4,6 @@ import RouteWrapper from './RouteWrapper';
 import TimeWrapper from './TimeWrapper';
 
 const MyInfoCard = ({ ticket, onRemove }) => {
-  console.log(ticket);
   return (
     <Wrapper>
       <TimeWrapper

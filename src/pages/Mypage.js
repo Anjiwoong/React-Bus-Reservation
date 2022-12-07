@@ -34,8 +34,6 @@ const Mypage = () => {
     getTickets();
   }, [getTickets]);
 
-  console.log(tickets);
-
   return (
     <>
       <Heading>예매 확인 및 취소</Heading>
